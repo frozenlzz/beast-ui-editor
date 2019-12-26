@@ -1,0 +1,151 @@
+@import '~antd/lib/style/themes/default.less';
+
+.main {
+  //position: relative;
+  //bottom:308px;
+//  width: 580px;
+//  margin: 40px auto 0 auto;
+//background-color:#FFFFFF;
+//  padding:25px 15px;
+  border-radius:6px;
+  :global {
+    .ant-form-item {
+      margin-bottom: 20px;
+      .ant-calendar-picker{
+        width: 100%;
+      }
+    }
+  }
+
+
+  .getCaptcha {
+    display: inline-block;
+    width: 100%;
+  }
+  .regBtn{
+    //text-align: center;
+    .submit {
+      width: 30%;
+      margin-right: 16px;
+      display: inline-block;
+      //display: block;
+
+    }
+  }
+
+
+  .login {
+    float: right;
+    line-height: @btn-height-lg;
+  }
+
+}
+
+.steps {
+  //margin: 24px auto !important;
+}
+
+.success,
+.warning,
+.error {
+  transition: color 0.3s;
+}
+
+.success {
+  color: @success-color;
+}
+
+.warning {
+  color: @warning-color;
+}
+
+.error {
+  color: @error-color;
+}
+
+.progress-pass > .progress {
+  :global {
+    .ant-progress-bg {
+      background-color: @warning-color;
+    }
+  }
+}
+
+.stepForm {
+  max-width: 520px;
+  margin: 40px auto 0;
+}
+
+.stepFormText {
+  margin-bottom: 24px;
+  :global {
+    .ant-form-item-label,
+    .ant-form-item-control {
+      line-height: 22px;
+    }
+  }
+}
+
+.result {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 0 8px;
+}
+
+.desc {
+  padding: 0 56px;
+  color: @text-color-secondary;
+  h3 {
+    margin: 0 0 12px 0;
+    color: @text-color-secondary;
+    font-size: 16px;
+    line-height: 32px;
+  }
+  h4 {
+    margin: 0 0 4px 0;
+    color: @text-color-secondary;
+    font-size: 14px;
+    line-height: 22px;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 12px;
+    line-height: 22px;
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .desc {
+    padding: 0;
+  }
+}
+
+.information {
+  line-height: 22px;
+  :global {
+    .ant-row:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
+  .label {
+    padding-right: 8px;
+    color: @heading-color;
+    text-align: right;
+    @media screen and (max-width: @screen-sm) {
+      text-align: left;
+    }
+  }
+}
+
+.money {
+  font-weight: 500;
+  font-size: 20px;
+  font-family: 'Helvetica Neue', sans-serif;
+  line-height: 14px;
+}
+
+.uppercase {
+  font-size: 12px;
+}
+
+

@@ -1,0 +1,44 @@
+.menu {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 280px;
+  min-height: 100vh;
+  background: rgba(238, 238, 238, 0.6);
+  max-height: 100vh;
+  z-index: 50;
+  transition: left ease 0.5s;
+}
+.menuActive {
+  position: absolute;
+  top: 0px;
+  width: 280px;
+  min-height: 100vh;
+  background: rgba(238, 238, 238, 0.6);
+  max-height: 100vh;
+  z-index: 50;
+  left: -280px;
+  transition: left ease 0.5s;
+}
+
+.backClick {
+  position: absolute;
+  top: calc(50% - 40px);
+  right: -28px;
+  width: 28px;
+  height: 80px;
+  line-height: 80px;
+  background: #eee;
+  text-align: center;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.radioStyle {
+  display: block;
+  height: 30px;
+  line-height: 30px;
+}
+.radioStyle:hover {
+  background: #69c0ff
+}

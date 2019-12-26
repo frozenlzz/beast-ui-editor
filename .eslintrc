@@ -1,0 +1,10 @@
+module.exports = {
+  globals:{
+    APP_TYPE:true,
+    page:true,
+  },
+  rules:{
+    semi:["off", "always"],
+    quotes:["off", "double"],
+  }
+}
