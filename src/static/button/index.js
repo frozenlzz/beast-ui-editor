@@ -17,4 +17,4 @@ class Jhbutton extends Component {
   }
 }
 
-module.exports = Jhbutton;
+export default Jhbutton;

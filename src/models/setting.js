@@ -1,4 +1,15 @@
-// import setting from '/common/models/setting';
-// export default setting;
+import defaultSettings from '../defaultSettings';
 
-module.exports = require('/common/models/setting');
+export default {
+  namespace: 'setting',
+  state: {
+    ...defaultSettings
+  },
+
+  effects: {},
+  reducers: {
+    setStateByPayload(state, { payload }) {
+      return { ...state, ...payload };
+    },
+  },
+};

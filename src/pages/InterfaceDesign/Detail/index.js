@@ -1,7 +1,7 @@
 import { Modal, Button } from 'antd';
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { createDetail } from '/common/components/HocCRUD';
+import { createDetail } from '@/components/HocCRUD';
 import { modelName, DataToDom, randomString, getKeyToElement } from '../config';
 import PageItem from '@/components/PageItem';
 import { isEmpty, omit, cloneDeep } from 'lodash';

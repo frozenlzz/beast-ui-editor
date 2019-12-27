@@ -1,22 +1,18 @@
 {
-    "plugins": [
-        [
-            "import",
-            [
-                {
-                    "libraryName": "antd",
-                    "style": true
-                },
-                {
-                    "libraryName": "ant-design-pro",
-                    "libraryDirectory": "lib",
-                    "style": true,
-                    "camel2DashComponentName": false
-                },
-                {
-                    "libraryName":"lodash"
-                }
-            ]
-        ]
+  "plugins": [
+    [
+      "import",
+      [
+        {
+          "libraryName": "antd",
+          "style": true
+        },
+        {
+          "libraryName": "lodash",
+          "libraryDirectory": "",
+          "camel2DashComponentName": false
+        }
+      ]
     ]
+  ]
 }

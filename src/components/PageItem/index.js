@@ -2,7 +2,6 @@ import { Button, Card, PageHeader, Spin } from 'antd';
 import React from 'react';
 import styles from './index.less';
 import { connect } from 'dva';
-import SaveBtn from '/common/componentsTpl/ButtonComp/SaveBtn';
 import isFunction from 'lodash/isFunction';
 import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
@@ -29,7 +28,7 @@ class PageItem extends React.Component {
         ...this.state.pageBodyStyle,
         top: this.headerRef.offsetHeight,
         // bottom:this.footerRef.offsetHeight,
-        bottom: ('footer' === this.props.actionPos && this.props.finalAction)?this.footerRef.offsetHeight:0,
+        bottom: ('footer' === this.props.actionPos && this.props.finalAction) ? this.footerRef.offsetHeight : 0,
       },
     });
   }
@@ -66,7 +65,7 @@ class PageItem extends React.Component {
 
   render() {
     const { pageBodyStyle, visible } = this.state;
-    const { headerProps, siderWidth, action, actionPos = 'footer', loading, showAction,showHeader } = this.props;
+    const { headerProps, siderWidth, action, actionPos = 'footer', loading, showAction, showHeader } = this.props;
     const styleO = visible ? {
       opacity: 1,
       transform: `translateX(0)`,
@@ -83,16 +82,16 @@ class PageItem extends React.Component {
     const finalAction = showAction ? (isEmpty(action) ? (
       <>
         <Button onClick={this.handleCancel.bind(this)}>返回</Button>
-        <SaveBtn loading={loading} onClick={this.handleOk.bind(this)} type={'primary'}>确认</SaveBtn>
+        <Button loading={loading} onClick={this.handleOk.bind(this)} type={'primary'}>确认</Button>
       </>
     ) : action) : null;
-    const detailClass = classNames(styles.detailWrapper,'detailWrapers');
+    const detailClass = classNames(styles.detailWrapper, 'detailWrapers');
     return (
       <div className={detailClass} style={wrapStyleO}>
         <div className={styles.innerPage} style={styleO}>
           <header className={styles.header} ref={node => (this.headerRef = node)}>
             {
-              showHeader&&<PageHeader
+              showHeader && <PageHeader
                 onBack={this.handleCancel.bind(this)}
                 title={this.props.title}
                 extra={'header' === actionPos ? finalAction : null}
@@ -101,7 +100,7 @@ class PageItem extends React.Component {
             }
 
           </header>
-          <div className={`${classNames(styles.body,this.props.bodyClassName)}`} style={pageBodyStyle}>
+          <div className={`${classNames(styles.body, this.props.bodyClassName)}`} style={pageBodyStyle}>
             <Card bordered={false}
                   bodyStyle={{ padding: 0 }}>
               <Spin spinning={loading}>
@@ -111,14 +110,14 @@ class PageItem extends React.Component {
               </Spin>
             </Card>
           </div>
-           {
-             ('footer' === actionPos && finalAction)&&
-              <footer className={styles.footer} ref={node => (this.footerRef = node)}>
-                {/* {'footer' === actionPos && finalAction} */}
-                {finalAction}
-              </footer>
-           }     
-          
+          {
+            ('footer' === actionPos && finalAction) &&
+            <footer className={styles.footer} ref={node => (this.footerRef = node)}>
+              {/* {'footer' === actionPos && finalAction} */}
+              {finalAction}
+            </footer>
+          }
+
         </div>
       </div>
     );
@@ -136,8 +135,8 @@ PageItem.defaultProps = {
   onOk: null, // 点击确认后的回调
   onCancel: null, // 点击取消后的回调
   headerProps: {}, // pageHeader 组件的属性
-  showHeader:true,
-  bodyClassName:''
+  showHeader: true,
+  bodyClassName: '',
 };
 
 export default PageItem;

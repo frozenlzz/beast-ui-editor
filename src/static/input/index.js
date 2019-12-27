@@ -13,4 +13,4 @@ class Jhinput extends Component {
   }
 }
 
-module.exports = Jhinput;
+export default Jhinput;

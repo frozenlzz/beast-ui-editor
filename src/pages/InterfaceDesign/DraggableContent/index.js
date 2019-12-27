@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { modelName, DataToDom } from '../config';
 import { isEmpty, ceil } from 'lodash';
-import { DraggableContainer, DraggableChild } from '@/componentsTpl/Draggable';
+import { DraggableContainer, DraggableChild } from '@/components/Draggable';
 import styles from './index.less';
 
 class DraggableContent extends Component {

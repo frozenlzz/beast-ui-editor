@@ -9,4 +9,4 @@ class JhdatePicker extends Component {
   }
 }
 
-module.exports = JhdatePicker;
+export default JhdatePicker;
