@@ -1,6 +1,6 @@
 import services from './service';
 import { modelName, addChildrenData, deleChildrenData, editChildrenData } from './config';
-import createCRUDModel from '/common/helpers/createCRUDModel';
+import createCRUDModel from '@/helpers/createCRUDModel';
 import { findObjectList } from './service';
 import { cloneDeep } from 'lodash';
 // 第三个参数为预留自定义操作

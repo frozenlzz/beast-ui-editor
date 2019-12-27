@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Radio, Button } from 'antd';
-import ChangeNumber from '@/componentsTpl/ChangeNumber';
+import ChangeNumber from '@/components/ChangeNumber';
 import styles from './index.less';
 /**
  * 基础属性功能

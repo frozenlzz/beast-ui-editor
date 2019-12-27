@@ -1,8 +1,8 @@
-import createCRUDService from '/common/helpers/createCRUDService';
+import createCRUDService from '@/helpers/createCRUDService';
 import { api } from './config';
 export default createCRUDService(api);
 
-// import { jsonPost, reqGet } from '/common/helpers/request';
+// import { jsonPost, reqGet } from '@/helpers/request';
 
 // // 查询大类信息
 // export async function findSkinClass(params, options = {}) {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Input, Collapse, Button } from 'antd';
 import { connect } from 'dva';
-import ChangeNumber from '@/componentsTpl/ChangeNumber';
+import ChangeNumber from '@/components/ChangeNumber';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getKeyToElement } from '../config';
 import BasicAttribute from './BasicAttribute';

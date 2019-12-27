@@ -1,7 +1,7 @@
 import { appConfig } from '@/appConfig';
 import React from 'react';
 import { isEmpty, cloneDeep, isArray } from 'lodash';
-import JH_DOM from '@/static/config';
+import * as JH_DOM from '@/static/config';
 const config = appConfig.INTERFACE_DESIGN;
 
 export const appCode = config.appCode;
