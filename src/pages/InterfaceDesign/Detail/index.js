@@ -57,11 +57,17 @@ class HostDetail extends React.Component {
     if (this.onkeydown) {
       document.addEventListener('keydown', this.onkeydown);
     }
-    if(oldProps.match.params.id !== this.props.match.params.id) {
+    if (oldProps.match.params.id !== this.props.match.params.id) {
       const { match } = this.props;
       const key = match && match.params.id;
       this.setState({
         currentIndex: key,
+      });
+    }
+    if (oldProps.interfaceDesign.currentIndex !== this.props.interfaceDesign.currentIndex) {
+      const { currentIndex } = this.props.interfaceDesign;
+      this.setState({
+        currentIndex: currentIndex,
       });
     }
   }
@@ -90,7 +96,7 @@ class HostDetail extends React.Component {
                 type: `${modelName}/delete`,
                 payload: { index: index },
               });
-            }
+            },
           );
         },
       });
@@ -116,6 +122,7 @@ class HostDetail extends React.Component {
       payload: { data: data, index: index },
     });
   }
+
   // 修改组件属性end
 
   // 拖拽元素模板到画布上
@@ -150,7 +157,7 @@ class HostDetail extends React.Component {
           this.setState({
             currentIndex: newData.key,
           });
-        }
+        },
       );
     }
   }
@@ -163,11 +170,11 @@ class HostDetail extends React.Component {
   showDetail(eOrRecord) {
     const { dispatch, match } = this.props;
     const key = match && match.params.id;
-    const widthList = cloneDeep(this.state.widthList)
+    const widthList = cloneDeep(this.state.widthList);
     const list = cloneDeep(this.state.list);
     // 将当前画布的key值存入List队列中，进入下一个画布操作
     list.push(key);
-    widthList.push(this.state.config.style && this.state.config.style.width || 1920)
+    widthList.push(this.state.config.style && this.state.config.style.width || 1920);
     this.setState({
       list: list,
       widthList: widthList,
@@ -186,6 +193,7 @@ class HostDetail extends React.Component {
       },
     });
   }
+
   canvasClick() {
     const { match } = this.props;
     const key = match && match.params.id;
@@ -193,6 +201,7 @@ class HostDetail extends React.Component {
       currentIndex: key,
     });
   }
+
   elementClick(e, item) {
     e.persist();
     e.stopPropagation();
@@ -203,9 +212,10 @@ class HostDetail extends React.Component {
       },
       () => {
         console.log('选中对象索引》》》', this.state.currentIndex);
-      }
+      },
     );
   }
+
   /**
    *
    * 新建保存
@@ -229,7 +239,7 @@ class HostDetail extends React.Component {
     if (!isEmpty(list)) {
       // 如果画布队列中存在画布key值，则进入上一个画布编辑，并清除画布在队列中的值
       const previouKey = list.pop();
-      widthList.pop()
+      widthList.pop();
       const record = { id: previouKey };
       this.setState(
         {
@@ -246,25 +256,27 @@ class HostDetail extends React.Component {
               isPage: !isEmpty(match),
             },
           });
-        }
+        },
       );
     } else {
       // 画布队列无值，返回最顶级画布页面
       this.props.hideDetail();
     }
   }
+
   // 处理宽度为像素px，%对应的输出值
   widthFn(width = '10%', maxWidth) {
     const reg = new RegExp('%', 'ig');
-    console.log('当前画布宽度----------------------------',width)
-    console.log('上级以上画布宽度列表widthList------------', this.state.widthList)
-    console.log('浏览器窗口宽度maxWidth------------------',maxWidth)
+    console.log('当前画布宽度----------------------------', width);
+    console.log('上级以上画布宽度列表widthList------------', this.state.widthList);
+    console.log('浏览器窗口宽度maxWidth------------------', maxWidth);
     let newWidth = width;
     if (reg.test(width)) {
       newWidth = `${(width.replace(reg, '') / 100) * maxWidth}px`;
     }
     return newWidth;
   }
+
   render() {
     const { match, id, loading } = this.props;
     const isEdit = (match && match.params.id !== '') || id !== '';
@@ -280,8 +292,8 @@ class HostDetail extends React.Component {
     const { currentData, currentIndex, config } = this.state;
     const { name, style } = (!isEmpty(config) && config) || '';
     const newConfig = !isEmpty(config) ? DataToDom(config.children) : [];
-    const displayFix = !isEmpty(config) && config.style.display && config.style.display === 'flex' && true || false
-    const bodyWidth = document.body.offsetWidth
+    const displayFix = !isEmpty(config) && config.style.display && config.style.display === 'flex' && true || false;
+    const bodyWidth = document.body.offsetWidth;
     const containerStyle = {
       ...style,
       left: '0',
@@ -292,7 +304,8 @@ class HostDetail extends React.Component {
       position: 'relative',
       border: '1px solid #ddd',
       overflowY: 'auto',
-      display: displayFix && 'flex' || ''
+      display: displayFix && 'flex' || '',
+      boxSizing: 'content-box',
       // userSelect: 'none',
     };
     return (
@@ -327,13 +340,13 @@ class HostDetail extends React.Component {
                 displayFix={displayFix}
               />
               {/*属性栏*/}
-              {
-                <PropertySettings
-                  currentData={currentData}
-                  currentIndex={currentIndex}
-                  detailId={key}
-                  showDetail={this.showDetail.bind(this)}
-                />
+              {currentIndex !== -1 &&
+              <PropertySettings
+                currentData={currentData}
+                currentIndex={currentIndex}
+                detailId={key}
+                showDetail={this.showDetail.bind(this)}
+              />
               }
             </div>
           </PageItem>

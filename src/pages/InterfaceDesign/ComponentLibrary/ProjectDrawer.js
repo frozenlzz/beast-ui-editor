@@ -109,7 +109,7 @@ class ProjectDrawer extends Component {
               onChange={this.handleChangeObject.bind(this)}
             >
               {selectData.map((v, i) => (
-                <Option value={v.id} key="1312313" key={v.id}>
+                <Option value={v.id} key={v.id}>
                   {v.name}
                 </Option>
               ))}
