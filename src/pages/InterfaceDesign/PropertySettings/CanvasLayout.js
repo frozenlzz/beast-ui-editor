@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Radio } from 'antd';
+import ChangeNumber from '@/components/ChangeNumber';
 import { cloneDeep, omit } from 'lodash';
 import styles from './index.less';
 
@@ -92,7 +93,6 @@ class FlexLayout extends Component {
   render() {
     const { flexDirection, flexWrap, justifyContent, alignItems } = this.state;
     const { currentIndex, initData } = this.props;
-    console.log(initData);
     return (
       <>
         <div>
@@ -181,6 +181,56 @@ class FlexLayout extends Component {
                 基线对齐
               </Radio.Button>
             </Radio.Group>
+          </div>
+        </div>
+        <div className={styles['line']}></div>
+        <div>
+          <div style={{ display: 'inline-block', width: '30%', verticalAlign: 'top' }}>
+            内边距(px)
+          </div>
+          <div style={{ display: 'inline-block', width: '100%' }}>
+            <div style={{display: 'flex', justifyContent: 'space-between' ,flexWrap: 'wrap'}}>
+              <p style={{width: '25%'}}>上</p>
+              <p style={{width: '25%'}}>右</p>
+              <p style={{width: '25%'}}>下</p>
+              <p style={{width: '25%'}}>左</p>
+              <div style={{width: '25%'}}>
+                <ChangeNumber
+                  styleName={'paddingTop'}
+                  unit={'px'}
+                  objName={'style'}
+                  initData={initData}
+                  {...this.props}
+                />
+              </div>
+              <div style={{width: '25%'}}>
+                <ChangeNumber
+                  styleName={'paddingRight'}
+                  unit={'px'}
+                  objName={'style'}
+                  initData={initData}
+                  {...this.props}
+                />
+              </div>
+              <div style={{width: '25%'}}>
+                <ChangeNumber
+                  styleName={'paddingBottom'}
+                  unit={'px'}
+                  objName={'style'}
+                  initData={initData}
+                  {...this.props}
+                />
+              </div>
+              <div style={{width: '25%'}}>
+                <ChangeNumber
+                  styleName={'paddingLeft'}
+                  unit={'px'}
+                  objName={'style'}
+                  initData={initData}
+                  {...this.props}
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div className={styles['line']}></div>

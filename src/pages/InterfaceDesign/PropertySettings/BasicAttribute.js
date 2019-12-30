@@ -59,7 +59,7 @@ class BasicAttribute extends Component {
       const regvh = new RegExp('vh', 'ig');
       const { initData } = this.props;
       let [newWidth, newHeight]  = ['a', 'a'];
-      console.log(initData.style.width);
+      // console.log(initData.style.width);
       if (initData.style) {
         if (regPx.test(initData.style.width)) {
           newWidth = 'a'

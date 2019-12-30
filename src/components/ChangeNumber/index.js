@@ -29,10 +29,12 @@ class ChangeNumber extends Component {
   // 修改组件属性start
   editAttribute({ data = {} }) {
     const index = this.props.currentIndex;
-    this.props.dispatch({
-      type: 'interfaceDesign/editAttribute',
-      payload: { data: data, index: index },
-    });
+    if(this.props.dispatch){
+      this.props.dispatch({
+        type: 'interfaceDesign/editAttribute',
+        payload: { data: data, index: index },
+      });
+    }
   }
 
   // 修改组件属性end
