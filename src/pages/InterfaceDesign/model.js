@@ -57,7 +57,7 @@ export default createCRUDModel(modelName, services, {
         key: '0004',
         DomType: 'div',
         position: {
-          x: 0,
+          x: 400,
           y: 300,
         },
         style: {
@@ -241,5 +241,16 @@ export default createCRUDModel(modelName, services, {
         };
       }
     },
+
+  /**
+   * 修改initData
+   *
+   * */
+  initDataChange(state, { payload }){
+    if(payload.initData) {
+      const { initData } = payload;
+      return { ...state, ...{initData: initData}}
+    }
+  }
   },
 });

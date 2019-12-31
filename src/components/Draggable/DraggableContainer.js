@@ -363,7 +363,10 @@ export default class DraggableContainer extends React.Component {
     const { Container, style } = this.props;
 
     return (
-      <Container style={style} ref={ref => (this.$ = ref)}>
+      <Container style={style} ref={ref => (this.$ = ref)}
+                 onDrop={event => this.props.drop(event)}
+                 onDragOver={event => this.props.allowDrop(event)}
+                 onClick={() => this.props.canvasClick()}>
         {this._renderChildren()}
         {this._renderGuideLine()}
       </Container>

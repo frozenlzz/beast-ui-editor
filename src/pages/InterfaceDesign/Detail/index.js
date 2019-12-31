@@ -8,6 +8,7 @@ import { isEmpty, omit, cloneDeep } from 'lodash';
 import ComponentLibrary from '../ComponentLibrary';
 import PropertySettings from '../PropertySettings';
 import DraggableContent from '../DraggableContent';
+import styles from '@/pages/InterfaceDesign/index.less';
 
 @connect(({ loading, interfaceDesign: { detail, isShowDetail }, interfaceDesign }) => ({
   detail,
@@ -306,6 +307,7 @@ class HostDetail extends React.Component {
       overflowY: 'auto',
       display: displayFix && 'flex' || '',
       boxSizing: 'content-box',
+      margin: 'auto',
       // userSelect: 'none',
     };
     return (
@@ -322,7 +324,7 @@ class HostDetail extends React.Component {
             actionPos={''}
             loading={!!loading.models[modelName]}
           >
-            <div style={{ position: 'relative' }}>
+            <div style={{ height: '100vh' }} className={styles['pageStyle']}>
               {/*组件栏*/}
               <ComponentLibrary interfaceDesign={this.props.interfaceDesign} divKey={key}/>
               {/* 画布区域 */}

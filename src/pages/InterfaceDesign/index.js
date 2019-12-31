@@ -8,7 +8,7 @@ import ComponentLibrary from './ComponentLibrary';
 import PropertySettings from './PropertySettings';
 // import { DraggableContainer, DraggableChild } from '@/componentsTpl/Draggable';
 import DraggableContent from './DraggableContent';
-// import styles from './index.less';
+import styles from './index.less';
 
 @connect(interfaceDesign => interfaceDesign)
 export default class InterfaceDesign extends Component {
@@ -209,12 +209,15 @@ export default class InterfaceDesign extends Component {
       width: '100%',
       minHeight: '100vh',
       position: 'relative',
+      overflow: 'hidden',
+      overflowY: 'auto',
+      marginRight: 'calc(100% - 100vw)'
       // border: '1px solid #ddd',
       // userSelect: 'none',
     };
     return (
       <>
-        <div style={{ position: 'relative' }}>
+        <div className={styles['pageStyle']}>
           {/*组件栏*/}
           <ComponentLibrary interfaceDesign={this.props.interfaceDesign} />
           {/* 画布区域 */}

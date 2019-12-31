@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Tree, Button, Modal, Radio, Alert } from 'antd';
-import { isEmpty, cloneDeep } from 'lodash';
+import { isEmpty, cloneDeep, isArray } from 'lodash';
 import { modelName, randomString, getKeyToElement } from '../config';
 import { connect } from 'dva';
+
 const { TreeNode } = Tree;
 
 @connect(interfaceDesign => interfaceDesign)
@@ -18,6 +19,7 @@ class PageTree extends Component {
       value: 0,
     };
   }
+
   componentDidUpdate(oldProps) {
     if (oldProps.interfaceDesign.currentIndex !== this.props.interfaceDesign.currentIndex) {
       const { currentIndex } = this.props.interfaceDesign;
@@ -63,7 +65,7 @@ class PageTree extends Component {
           </TreeNode>
         );
       }
-      return <TreeNode key={item.key} title={item.name} dataRef={item} />;
+      return <TreeNode key={item.key} title={item.name} dataRef={item}/>;
     });
 
   deleteAssembly(selectedKeys) {
@@ -85,12 +87,13 @@ class PageTree extends Component {
                 payload: { index: key },
               });
               _this.currentKeyChange(-1);
-            }
+            },
           );
         },
       });
     }
   }
+
   showModal = () => {
     this.setState({
       visible: true,
@@ -101,7 +104,7 @@ class PageTree extends Component {
     const { config } = this.props;
     let assembly = (!isEmpty(config) && cloneDeep(config[this.state.value])) || {};
     assembly['position'] = {}; // 元素位置
-    assembly.position['x'] = 0;
+    assembly.position['x'] = 280;
     assembly.position['y'] = 0;
     assembly.key = randomString();
     console.log('assembly', assembly);
@@ -131,16 +134,83 @@ class PageTree extends Component {
       value: e.target.value,
     });
   };
+
   currentDomType() {
     const { initData } = this.props;
     const { currentIndex } = this.props.interfaceDesign;
     if (currentIndex !== -1) {
-      const newData = getKeyToElement({ data: initData, index: currentIndex })
+      const newData = getKeyToElement({ data: initData, index: currentIndex });
       return newData.DomType && newData.DomType || '';
     } else {
       return '';
     }
   }
+
+  onDrop = info => {
+    const dropKey = info.node.props.eventKey;
+    const dragKey = info.dragNode.props.eventKey;
+    const dropPos = info.node.props.pos.split('-');
+    const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
+
+    const loop = (data, key, callback) => {
+      data.forEach((item, index, arr) => {
+        if (item.key === key) {
+          return callback(item, index, arr);
+        }
+        if (item.children) {
+          return loop(item.children, key, callback);
+        }
+      });
+    };
+    const data = [...this.props.interfaceDesign.initData];
+    let dragObj; // 当前选中的节点元素
+    loop(data, dragKey, (item, index, arr) => {
+      arr.splice(index, 1);
+      dragObj = item;
+    });
+
+    if (!info.dropToGap && isArray(info.node.props.dataRef.children)) {
+      loop(data, dropKey, item => {
+        item.children = item.children || [];
+        // where to insert 示例添加到尾部，可以是随意位置
+        item.children.push(dragObj);
+      });
+    } else if (
+      (info.node.props.children || []).length > 0 && // Has children
+      info.node.props.expanded && // Is expanded
+      dropPosition === 1 // On the bottom gap
+    ) {
+      loop(data, dropKey, item => {
+        item.children = item.children || [];
+        // where to insert 示例添加到头部，可以是随意位置
+        item.children.unshift(dragObj);
+      });
+    } else {
+      let ar;
+      let i;
+      loop(data, dropKey, (item, index, arr) => {
+        ar = arr;
+        i = index;
+      });
+      if (dropPosition === -1) {
+        ar.splice(i, 0, dragObj);
+      } else {
+        ar.splice(i + 1, 0, dragObj);
+      }
+    }
+    this.props.dispatch({
+      type: `${modelName}/initDataChange`,
+      payload: { initData: data },
+    });
+  };
+  onDragEnter = info => {
+    // console.log(info);
+    // expandedKeys 需要受控时设置
+    // this.setState({
+    //   expandedKeys: info.expandedKeys,
+    // });
+  };
+
   render() {
     const { initData, config } = this.props;
     const { selectedKeys } = this.state;
@@ -195,6 +265,9 @@ class PageTree extends Component {
             onSelect={this.onSelect}
             selectedKeys={this.state.selectedKeys}
             showLine={true}
+            draggable
+            onDragEnter={this.onDragEnter}
+            onDrop={this.onDrop}
           >
             {!isEmpty(initData) && this.renderTreeNodes(initData)}
           </Tree>
@@ -207,18 +280,18 @@ class PageTree extends Component {
         >
           <Alert
             showIcon
-            message="新增组件定位默认在左上角(x=0,y=0)"
+            message="新增组件定位默认在左上角(x=280,y=0)"
             type="warning"
             style={{ position: 'absolute', top: '54px', left: '0px', width: '100%' }}
           />
           <div style={{ marginTop: '20px', maxHeight: '400px', overflowY: 'auto' }}>
             <Radio.Group onChange={this.onRadioChange} value={this.state.value}>
               {!isEmpty(config) &&
-                config.map((v, i) => (
-                  <Radio style={radioStyle} value={i} key={`Radio_${i}`}>
-                    {v.name}
-                  </Radio>
-                ))}
+              config.map((v, i) => (
+                <Radio style={radioStyle} value={i} key={`Radio_${i}`}>
+                  {v.name}
+                </Radio>
+              ))}
             </Radio.Group>
           </div>
         </Modal>

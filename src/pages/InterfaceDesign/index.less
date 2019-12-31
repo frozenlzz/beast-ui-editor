@@ -1,9 +1,10 @@
 @background: red;
-@rules : {
+@rules: {
   position: absolute;
   background: @background;
   z-index: 9999
 }
+
 .top {
   top: 0;
   left: 0;
@@ -11,6 +12,7 @@
   height: 1px;
   @rules();
 }
+
 .bottom {
   bottom: 0;
   left: 0;
@@ -18,6 +20,7 @@
   height: 1px;
   @rules();
 }
+
 .left {
   top: 0;
   left: 0;
@@ -25,6 +28,7 @@
   height: 100%;
   @rules();
 }
+
 .right {
   top: 0;
   right: 0;
@@ -47,3 +51,11 @@
   cursor: pointer;
 }
 
+.pageStyle {
+  position: relative;
+  background: #262626;
+  background-image: linear-gradient(#262626 14px, transparent 0), linear-gradient(90deg, white 1px, transparent 0);
+  background-size: 15px 15px, 15px 15px;
+  overflow-y: hidden;
+  overflow-x: auto;
+}

@@ -74,7 +74,8 @@ class PropertySettings extends Component {
           width: '280px',
           height: '100vh',
           overflowY: 'auto',
-          zIndex: '50',
+          zIndex: '99',
+          background: 'rgba(238, 238, 238, 0.6)',
         }}
       >
         {!isEmpty(initData) && (

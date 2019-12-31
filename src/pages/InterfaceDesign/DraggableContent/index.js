@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { modelName, DataToDom } from '../config';
 import { isEmpty, ceil } from 'lodash';
+import { Slider } from 'antd';
 import { DraggableContainer, DraggableChild } from '@/components/Draggable';
 import styles from './index.less';
 
 class DraggableContent extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      scaleValue: 100,
+    };
   }
 
   // 画布递归渲染
@@ -35,6 +38,12 @@ class DraggableContent extends Component {
     );
   }
 
+  scaleChange(value) {
+    this.setState({
+      scaleValue: value,
+    });
+  }
+
   render() {
     const {
       currentIndex = '',
@@ -51,19 +60,25 @@ class DraggableContent extends Component {
       paddingBottom: '0',
       paddingLeft: '0',
     };
+    const { scaleValue } = this.state;
     return (
-      <div
-        style={{
-          maxWidth: '100%',
-          overflowY: 'auto',
-          position: 'relative',
-        }}
-        onDrop={event => this.props.drop(event)}
-        onDragOver={event => this.props.allowDrop(event)}
-        onClick={() => this.props.canvasClick()}
-      >
+      <>
+        {/*<div*/}
+        {/*  style={{*/}
+        {/*    overflow: 'auto',*/}
+        {/*    position: 'relative',*/}
+        {/*    background: '#fff',*/}
+        {/*    transform: `scale(${scaleValue/100})`,*/}
+        {/*  }}*/}
+        {/*  onDrop={event => this.props.drop(event)}*/}
+        {/*  onDragOver={event => this.props.allowDrop(event)}*/}
+        {/*  onClick={() => this.props.canvasClick()}*/}
+        {/*>*/}
         <DraggableContainer
-          style={containerStyle}
+          drop={this.props.drop}
+          allowDrop={this.props.allowDrop}
+          canvasClick={this.props.canvasClick}
+          style={{ ...containerStyle, ...{ background: '#fff', transform: `scale(${scaleValue / 100})` } }}
           lineStyle={{ zIndex: '49' }}
           autoHeight={autoHeight}
         >
@@ -123,7 +138,15 @@ class DraggableContent extends Component {
             );
           })}
         </DraggableContainer>
-      </div>
+        {/*</div>*/}
+        <div style={{ position: 'fixed', bottom: '0', right: '300px', width: '200px', zIndex: '100' }}>
+          <Slider tipFormatter={value => `${value}%`}
+                  min={50}
+                  step={5}
+                  value={scaleValue}
+                  onChange={this.scaleChange.bind(this)}/>
+        </div>
+      </>
     );
   }
 }
