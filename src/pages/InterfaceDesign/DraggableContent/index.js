@@ -78,7 +78,13 @@ class DraggableContent extends Component {
           drop={this.props.drop}
           allowDrop={this.props.allowDrop}
           canvasClick={this.props.canvasClick}
-          style={{ ...containerStyle, ...{ background: '#fff', transform: `scale(${scaleValue / 100})` } }}
+          style={{
+            ...containerStyle, ...{
+              background: '#fff',
+              transform: `scale(${scaleValue / 100})`,
+              boxShadow: 'rgb(221, 221, 221) 0px 0px 24px',
+            },
+          }}
           lineStyle={{ zIndex: '49' }}
           autoHeight={autoHeight}
         >

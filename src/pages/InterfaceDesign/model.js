@@ -1,5 +1,5 @@
 import services from './service';
-import { modelName, addChildrenData, deleChildrenData, editChildrenData } from './config';
+import { modelName, addChildrenData, deleteChildrenData, editChildrenData } from './config';
 import createCRUDModel from '@/helpers/createCRUDModel';
 import { findObjectList } from './service';
 import { cloneDeep, isEmpty } from 'lodash';
@@ -126,65 +126,61 @@ export default createCRUDModel(modelName, services, {
     /**
      * 增加模块
      * @param {string} index 画布对应的key值，顶层画布为-1
-     * @param {Object} newObj 新增的组件对象
+     * @param state
      * */
     add(state, { payload }) {
       const { index, newObj } = payload;
-      let newRevokeList = cloneDeep(state.revokeList);
       let newData = cloneDeep(state.initData);
-      newRevokeList.push(cloneDeep(state.initData)); // 当前添加元素之前的数据存入历史记录中
+      const newList = RevokeListChange(state);
       addChildrenData(newData, index, newObj);
       return {
         ...state, ...{
           initData: newData,
-          revokeList: newRevokeList,
-          contraryRevokeList: [],
         },
+        ...newList,
       };
     },
 
     /**
      * 修改组件
      * @param {Object} data 新增的组件对象
-     * @param {String} index 当前修改元素对应的key值
+     * @param state
      * */
     editAttribute(state, { payload }) {
       const { index, data } = payload;
-      let newRevokeList = cloneDeep(state.revokeList);
       let newData = cloneDeep(state.initData);
-      newRevokeList.push(cloneDeep(state.initData)); // 当前添加元素之前的数据存入历史记录中
+      const newList = RevokeListChange(state);
       editChildrenData(newData, index, data);
       return {
         ...state, ...{
           initData: newData,
-          revokeList: newRevokeList,
-          contraryRevokeList: [],
         },
+        ...newList,
       };
     },
 
     /**
      * 删除模块
      * @param {String} index 需要删除的组件的key值
+     * @param state
      * */
     delete(state, { payload }) {
       const { index } = payload;
-      let newRevokeList = cloneDeep(state.revokeList);
       let newData = cloneDeep(state.initData);
-      newRevokeList.push(cloneDeep(state.initData)); // 当前添加元素之前的数据存入历史记录中
-      deleChildrenData(newData, index);
+      const newList = RevokeListChange(state);
+      deleteChildrenData(newData, index);
       return {
         ...state, ...{
           initData: newData,
-          revokeList: newRevokeList,
-          contraryRevokeList: [],
         },
+        ...newList,
       };
     },
 
     /**
      * 当前选中模块对应key值
      * @param index
+     * @param state
      * */
     keyChange(state, { payload }) {
       const { key } = payload;
@@ -194,6 +190,7 @@ export default createCRUDModel(modelName, services, {
     /**
      * 是否弹出项目选择栏
      * @param id
+     * @param state
      * */
     objectVisibleChange(state, { payload }) {
       const { visible } = payload;
@@ -242,15 +239,33 @@ export default createCRUDModel(modelName, services, {
       }
     },
 
-  /**
-   * 修改initData
-   *
-   * */
-  initDataChange(state, { payload }){
-    if(payload.initData) {
-      const { initData } = payload;
-      return { ...state, ...{initData: initData}}
-    }
-  }
+    /**
+     * 修改initData
+     * @param state
+     * @param payload
+     * */
+    initDataChange(state, { payload }) {
+      if (payload.initData) {
+        const { initData } = payload;
+        const newList = RevokeListChange(state);
+        return {
+          ...state,
+          ...{
+            initData: initData,
+          },
+          ...newList,
+        };
+      }
+    },
   },
 });
+
+// 每次改变页面数据内容时，记录的上一次操作历史
+function RevokeListChange(state) {
+  let newRevokeList = cloneDeep(state.revokeList);
+  newRevokeList.push(cloneDeep(state.initData)); // 当前添加元素之前的数据存入历史记录中
+  return {
+    revokeList: newRevokeList,
+    contraryRevokeList: [],
+  };
+}

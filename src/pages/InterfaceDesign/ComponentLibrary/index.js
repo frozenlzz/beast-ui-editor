@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Collapse, Icon } from 'antd';
+import { Button, Collapse, Icon, Popover } from 'antd';
 import { BOM_TYPE, getKeyToElement, modelName } from '../config';
 import { isEmpty } from 'lodash';
 import router from 'umi/router';
@@ -30,6 +30,12 @@ const config = [
     },
   },
   {
+    name: '日历',
+    DomType: 'JhdatePicker',
+    attribute: {},
+    style: {},
+  },
+  {
     name: 'h2',
     DomType: 'h2',
     attribute: {},
@@ -38,13 +44,6 @@ const config = [
       height: 'auto',
     },
   },
-  // {
-  //   name: '日历',
-  //   DomType: 'JhdatePicker',
-  //   attribute: {
-  //   },
-  //   style: {},
-  // },
   {
     name: '画布',
     DomType: 'div',
@@ -162,26 +161,32 @@ class ComponentLibrary extends Component {
               </div>
             </Panel>
             <Panel header="组件库 (拖拽到画布)" key="2">
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+              <div style={{ padding: '0 10px' }}>
                 {config.map((item, index) => {
                   return (
                     <div
                       key={index}
-                      style={{
-                        ...item.style,
-                        // pointerEvents: 'none',
-                        display: 'inline-block',
-                        marginBottom: '10px',
-                      }}
+                      className={styles['assembly']}
                       draggable={true}
                       onDragStart={event => this.drag(event, item)}
                     >
-                      {BOM_TYPE({
+                      {/*{BOM_TYPE({
                         DomType: item.DomType,
                         name: item.name,
                         style: item.style,
                         attribute: item.attribute,
-                      })}
+                      })}*/}
+                      <Popover
+                        placement="right"
+                        content={BOM_TYPE({
+                          DomType: item.DomType,
+                          name: item.name,
+                          style: item.style,
+                          attribute: item.attribute,
+                        })}
+                        overlayStyle={{ width: '200px', pointerEvents: 'none', }}>
+                        {item.DomType}&nbsp;&nbsp;{item.name}
+                      </Popover>
                     </div>
                   );
                 })}

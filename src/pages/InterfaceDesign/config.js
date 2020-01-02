@@ -33,38 +33,6 @@ export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute =
       <DomType {...attribute} style={{ ...newStyles }} >{ name }</DomType>
     );
   }
-  // switch (DomType) {
-  //   case 'button':
-  //     bom = (
-  //       <Button {...attribute} style={{ ...newStyles }}>
-  //         {name}
-  //       </Button>
-  //     );
-  //     // console.log(types.index[DomType])
-  //     // console.log(types.button)
-  //     break;
-  //   case 'input':
-  //     bom = <Input {...attribute} style={{ ...newStyles }} />;
-  //     break;
-  //   case 'h2':
-  //     bom = (
-  //       <h2 {...attribute} style={{ ...newStyles }}>
-  //         {name}
-  //       </h2>
-  //     );
-  //     break;
-  //   case 'div':
-  //     bom = (
-  //       <div {...attribute} style={style}>
-  //         {name}
-  //       </div>
-  //     );
-  //     break;
-  //   default:
-  //     let Data = styles[DomType];
-  //     bom = <Data attribute={{ ...attribute }} newStyles={{ ...newStyles }} name={name}></Data>;
-  //     console.log(styles[DomType]);
-  // }
   return bom;
 };
 // 将数据转换成可渲染页面数据格式
@@ -86,10 +54,10 @@ export const DataToDom = data => {
  */
 export const randomString = len => {
   len = len || 16;
-  var $chars = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
-  var maxPos = $chars.length;
-  var pwd = '';
-  for (var i = 0; i < len; i++) {
+  let $chars = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
+  let maxPos = $chars.length;
+  let pwd = '';
+  for (let i = 0; i < len; i++) {
     pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
   }
   return pwd;
@@ -139,13 +107,13 @@ export function addChildrenData(initData, key, data) {
 }
 
 // 删除对应对象
-export function deleChildrenData(initData, key) {
+export function deleteChildrenData(initData, key) {
   initData.forEach((v, i) => {
     if (v.key === key) {
       initData.splice(i, 1);
       return;
     } else if (v.children) {
-      deleChildrenData(v.children, key);
+      deleteChildrenData(v.children, key);
     }
   });
 }

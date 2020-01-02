@@ -66,6 +66,7 @@ export default class InterfaceDesign extends Component {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onkeydown);
   }
+
   onkeydown = e => {
     if (e.keyCode === 46 && this.state.currentIndex !== -1) {
       const index = this.state.currentIndex;
@@ -85,12 +86,14 @@ export default class InterfaceDesign extends Component {
       });
     }
   };
+
   objectVisibleChange(bool) {
     this.props.dispatch({
       type: `${modelName}/objectVisibleChange`,
       payload: { visible: bool },
     });
   }
+
   // 点击当前元素，弹起触发
   MouseUp(e, index, item) {
     e.persist();
@@ -110,6 +113,7 @@ export default class InterfaceDesign extends Component {
       payload: { data: data, index: index },
     });
   }
+
   // 修改组件属性end
 
   // 拖拽元素模板到画布上
@@ -119,32 +123,34 @@ export default class InterfaceDesign extends Component {
     ev.persist();
     const config = this.state.config;
     let data = ev.dataTransfer.getData('Text');
-    let newData = JSON.parse(data);
-    console.log(newData);
-    const offsetX = newData.offsetX || 0; // 鼠标距离拖拽元素的原点x轴
-    const offsetY = newData.offsetY || 0; // 鼠标距离拖拽元素的原点y轴
-    newData['position'] = {}; // 元素位置
-    newData.position['x'] = ev.nativeEvent.offsetX - offsetX; // 鼠标距离放置容器的原点x轴 减去 鼠标距离拖拽元素的原点x轴
-    newData.position['y'] = ev.nativeEvent.offsetY - offsetY; // 鼠标距离放置容器的原点y轴 减去 鼠标距离拖拽元素的原点y轴
-    newData.key = randomString();
-    newData = omit(newData, ['offsetX', 'offsetY']);
-    if (index === '-1') {
-      this.setState(
-        {
-          config: [...config, newData],
-          currentData: newData,
-        },
-        () => {
-          this.props.dispatch({
-            type: `${modelName}/add`,
-            payload: { newObj: newData, index: -1 },
-          });
-          this.currentKeyChange(newData.key);
-          // this.setState({
-          //   currentIndex: newData.key,
-          // });
-        }
-      );
+    if (data) {
+      let newData = JSON.parse(data);
+      console.log(newData);
+      const offsetX = newData.offsetX || 0; // 鼠标距离拖拽元素的原点x轴
+      const offsetY = newData.offsetY || 0; // 鼠标距离拖拽元素的原点y轴
+      newData['position'] = {}; // 元素位置
+      newData.position['x'] = ev.nativeEvent.offsetX - offsetX; // 鼠标距离放置容器的原点x轴 减去 鼠标距离拖拽元素的原点x轴
+      newData.position['y'] = ev.nativeEvent.offsetY - offsetY; // 鼠标距离放置容器的原点y轴 减去 鼠标距离拖拽元素的原点y轴
+      newData.key = randomString();
+      newData = omit(newData, ['offsetX', 'offsetY']);
+      if (index === '-1') {
+        this.setState(
+          {
+            config: [...config, newData],
+            currentData: newData,
+          },
+          () => {
+            this.props.dispatch({
+              type: `${modelName}/add`,
+              payload: { newObj: newData, index: -1 },
+            });
+            this.currentKeyChange(newData.key);
+            // this.setState({
+            //   currentIndex: newData.key,
+            // });
+          },
+        );
+      }
     }
   }
 
@@ -179,12 +185,14 @@ export default class InterfaceDesign extends Component {
       },
     });
   }
+
   canvasClick() {
     this.currentKeyChange(-1);
     // this.setState({
     //   currentIndex: -1,
     // });
   }
+
   elementClick(e, item) {
     e.persist();
     e.stopPropagation();
@@ -196,7 +204,7 @@ export default class InterfaceDesign extends Component {
       () => {
         this.currentKeyChange(item.key);
         console.log('选中对象索引》》》', item.key);
-      }
+      },
     );
   }
 
@@ -211,7 +219,7 @@ export default class InterfaceDesign extends Component {
       position: 'relative',
       overflow: 'hidden',
       overflowY: 'auto',
-      marginRight: 'calc(100% - 100vw)'
+      marginRight: 'calc(100% - 100vw)',
       // border: '1px solid #ddd',
       // userSelect: 'none',
     };
@@ -219,7 +227,7 @@ export default class InterfaceDesign extends Component {
       <>
         <div className={styles['pageStyle']}>
           {/*组件栏*/}
-          <ComponentLibrary interfaceDesign={this.props.interfaceDesign} />
+          <ComponentLibrary interfaceDesign={this.props.interfaceDesign}/>
           {/* 画布区域 */}
           <DraggableContent
             drop={this.drop.bind(this)}

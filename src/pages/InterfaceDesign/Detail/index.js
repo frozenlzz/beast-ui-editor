@@ -133,33 +133,35 @@ class HostDetail extends React.Component {
     ev.persist();
     let config = cloneDeep(this.state.config);
     let data = ev.dataTransfer.getData('Text');
-    let newData = JSON.parse(data);
-    const offsetX = newData.offsetX || 0; // 鼠标距离拖拽元素的原点x轴
-    const offsetY = newData.offsetY || 0; // 鼠标距离拖拽元素的原点y轴
-    newData['position'] = {}; // 元素位置
-    newData.position['x'] = ev.nativeEvent.offsetX - offsetX; // 鼠标距离放置容器的原点x轴 减去 鼠标距离拖拽元素的原点x轴
-    newData.position['y'] = ev.nativeEvent.offsetY - offsetY; // 鼠标距离放置容器的原点y轴 减去 鼠标距离拖拽元素的原点y轴
-    newData.key = randomString();
-    newData = omit(newData, ['offsetX', 'offsetY']);
-    config.children.push(newData);
-    const { match } = this.props;
-    const key = match && match.params.id;
-    if (key) {
-      this.setState(
-        {
-          config: config,
-          currentData: newData,
-        },
-        () => {
-          this.props.dispatch({
-            type: `${modelName}/add`,
-            payload: { newObj: newData, index: key },
-          });
-          this.setState({
-            currentIndex: newData.key,
-          });
-        },
-      );
+    if (data) {
+      let newData = JSON.parse(data);
+      const offsetX = newData.offsetX || 0; // 鼠标距离拖拽元素的原点x轴
+      const offsetY = newData.offsetY || 0; // 鼠标距离拖拽元素的原点y轴
+      newData['position'] = {}; // 元素位置
+      newData.position['x'] = ev.nativeEvent.offsetX - offsetX; // 鼠标距离放置容器的原点x轴 减去 鼠标距离拖拽元素的原点x轴
+      newData.position['y'] = ev.nativeEvent.offsetY - offsetY; // 鼠标距离放置容器的原点y轴 减去 鼠标距离拖拽元素的原点y轴
+      newData.key = randomString();
+      newData = omit(newData, ['offsetX', 'offsetY']);
+      config.children.push(newData);
+      const { match } = this.props;
+      const key = match && match.params.id;
+      if (key) {
+        this.setState(
+          {
+            config: config,
+            currentData: newData,
+          },
+          () => {
+            this.props.dispatch({
+              type: `${modelName}/add`,
+              payload: { newObj: newData, index: key },
+            });
+            this.setState({
+              currentIndex: newData.key,
+            });
+          },
+        );
+      }
     }
   }
 
