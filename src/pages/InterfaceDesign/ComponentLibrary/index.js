@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Collapse, Icon, Popover } from 'antd';
+import { Button, Collapse, Icon, Popover, Input } from 'antd';
 import { BOM_TYPE, getKeyToElement, modelName } from '../config';
 import { isEmpty } from 'lodash';
 import router from 'umi/router';
@@ -9,6 +9,7 @@ import PageTree from './PageTree';
 import ProjectDrawer from './ProjectDrawer';
 import { connect } from 'dva';
 
+const { Search } = Input;
 const { Panel } = Collapse;
 const config = [
   {
@@ -62,6 +63,7 @@ class ComponentLibrary extends Component {
     super(props);
     this.state = {
       toSwitch: true,
+      assemblySearchValue: '', // 组件搜索关键字
     };
   }
 
@@ -111,8 +113,15 @@ class ComponentLibrary extends Component {
     });
   }
 
+  // 组件快速搜索
+  assemblySearch(value) {
+    this.setState({
+      assemblySearchValue: value,
+    });
+  }
+
   render() {
-    const { toSwitch } = this.state;
+    const { toSwitch, assemblySearchValue } = this.state;
     // const { divKey } = this.props;
     const { initData, revokeList, contraryRevokeList } = this.props.interfaceDesign;
     return (
@@ -160,15 +169,24 @@ class ComponentLibrary extends Component {
                 </div>
               </div>
             </Panel>
-            <Panel header="组件库 (拖拽到画布)" key="2">
-              <div style={{ padding: '0 10px' }}>
-                {config.map((item, index) => {
+            <Panel header={`组件库 (拖拽到画布)`} key="2">
+              <div style={{ padding: '0px 10px' }}>
+                <Search
+                  placeholder="input search assembly"
+                  onSearch={value => this.assemblySearch(value)}
+                  style={{ width: '100%' }}
+                />
+                <div className={styles['line']}></div>
+              </div>
+              <div style={{ padding: '0px 0px 10px 20px', maxHeight: '300px', overflow: 'auto' }}>
+                {!isEmpty(config) && config.map((item, index) => {
                   return (
                     <div
                       key={index}
                       className={styles['assembly']}
                       draggable={true}
                       onDragStart={event => this.drag(event, item)}
+                      style={{ display: item.DomType.includes(assemblySearchValue) || item.name.includes(assemblySearchValue) ? '' : 'none' }}
                     >
                       {/*{BOM_TYPE({
                         DomType: item.DomType,
@@ -184,7 +202,7 @@ class ComponentLibrary extends Component {
                           style: item.style,
                           attribute: item.attribute,
                         })}
-                        overlayStyle={{ width: '200px', pointerEvents: 'none', }}>
+                        overlayStyle={{ width: '200px', pointerEvents: 'none' }}>
                         {item.DomType}&nbsp;&nbsp;{item.name}
                       </Popover>
                     </div>
