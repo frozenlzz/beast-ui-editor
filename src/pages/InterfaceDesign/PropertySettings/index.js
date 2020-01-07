@@ -72,7 +72,7 @@ class PropertySettings extends Component {
           top: '0px',
           right: '0px',
           width: '280px',
-          height: '100vh',
+          height: '100%',
           overflowY: 'auto',
           zIndex: '99',
           background: 'rgba(238, 238, 238, 0.6)',

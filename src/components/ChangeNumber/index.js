@@ -12,6 +12,7 @@ class ChangeNumber extends Component {
     max: 99999, // 数字输入框数字范围最最大值
     step: 1, // 步长
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +20,7 @@ class ChangeNumber extends Component {
       value: props.initData[props.objName] || {},
     };
   }
+
   componentDidUpdate(oldProps) {
     if (oldProps.initData !== this.props.initData) {
       this.setState({
@@ -26,10 +28,11 @@ class ChangeNumber extends Component {
       });
     }
   }
+
   // 修改组件属性start
   editAttribute({ data = {} }) {
     const index = this.props.currentIndex;
-    if(this.props.dispatch){
+    if (this.props.dispatch) {
       this.props.dispatch({
         type: 'interfaceDesign/editAttribute',
         payload: { data: data, index: index },
@@ -46,7 +49,7 @@ class ChangeNumber extends Component {
    * @param {String} value 输入框值
    * */
 
-  changeStyle({ styleName = '', unit = '', value = '' }) {
+  changeStyle({ styleName = '', unit = '', value }) {
     if (isString(styleName) && styleName !== '' && isObject(this.state.value)) {
       let oneStyle = {};
       oneStyle[styleName] = `${value}${unit}`;
@@ -60,10 +63,10 @@ class ChangeNumber extends Component {
           newStyle[styleName] = `${(newStyle[styleName] == '0px' &&
             (styleName === 'width' || styleName === 'height') &&
             'auto') ||
-            newStyle[styleName]}`;
+          newStyle[styleName]}`;
           newData[this.props.objName] = newStyle;
           this.editAttribute({ data: newData });
-        }
+        },
       );
     }
   }
@@ -71,12 +74,12 @@ class ChangeNumber extends Component {
   NumberChange(e) {
     const { styleName, unit } = this.props;
     const { value } = this.state;
-    let obj = {};
+    // let obj = {};
     if (!isNumber(e) && e && e.target) {
-      this.changeStyle({ styleName: styleName, unit: unit, value: e.target.value });
-      if (isObject(this.state.value)) {
-        obj[styleName] = `${e.target.value}${unit}`;
-      }
+      this.changeStyle({ styleName: styleName, unit: unit, value: e.target.value !== '' ? e.target.value : '0' });
+      // if (isObject(this.state.value)) {
+      //   obj[styleName] = `${e.target.value !== '' ? e.target.value : '0'}${unit}`;
+      // }
     } else if (isNumber(e)) {
       const reg = new RegExp(this.props.unit, 'ig');
       const newNumber = isString(value[styleName])
@@ -87,13 +90,13 @@ class ChangeNumber extends Component {
         isNaN(Math.abs(e - newNumber)) ||
         (Math.abs(e - newNumber) < 1 && Math.abs(e - newNumber) > 0)
       ) {
-        this.changeStyle({ styleName: styleName, unit: unit, value: e });
+        this.changeStyle({ styleName: styleName, unit: unit, value: e !== '' ? e : '0' });
       }
-      if (isObject(this.state.value)) {
-        obj[styleName] = `${e}${unit}`;
-      }
+      // if (isObject(this.state.value)) {
+      //   obj[styleName] = `${e}${unit}`;
+      // }
     }
-    this.setState({ value: { ...this.state.value, ...obj } });
+    // this.setState({ value: { ...this.state.value, ...obj } });
   }
 
   render() {
@@ -103,8 +106,8 @@ class ChangeNumber extends Component {
     const newValue =
       isObject(value) && value
         ? isString(value[styleName])
-          ? value[styleName].replace(reg, '')
-          : value[styleName]
+        ? value[styleName].replace(reg, '')
+        : value[styleName]
         : value;
     return (
       <InputNumber
@@ -120,4 +123,5 @@ class ChangeNumber extends Component {
     );
   }
 }
+
 export default ChangeNumber;

@@ -65,7 +65,22 @@ class ReleaseVersion extends Component {
       <>
         {!isEmpty(item.children) &&
         DataToDom(item.children).map(v => {
-          return React.cloneElement(v.DomType !== 'div' && v.comp || <div>{this.childrenDom(v)}</div>, {
+          return React.cloneElement(v.DomType !== 'div' && v.comp ||
+            <div>
+              {
+                (item.style.display &&
+                  <div style={{
+                    ...v.style,
+                    position: v.style.display ? '' : 'absolute',
+                    width: v.style.width && v.style.width,
+                    height: v.style.height && v.style.height,
+                  }}>
+                    {this.childrenDom(v)}
+                  </div>
+                  || this.childrenDom(v))
+              }
+            </div>,
+            {
               key: v.key,
               style: {
                 ...v.style,

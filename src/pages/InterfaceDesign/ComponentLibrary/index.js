@@ -37,8 +37,8 @@ const config = [
     style: {},
   },
   {
-    name: 'h2',
-    DomType: 'h2',
+    name: '文本',
+    DomType: 'p',
     attribute: {},
     style: {
       width: '100px',

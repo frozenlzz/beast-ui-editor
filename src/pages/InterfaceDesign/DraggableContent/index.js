@@ -19,10 +19,26 @@ class DraggableContent extends Component {
       <>
         {!isEmpty(item.children) &&
         DataToDom(item.children).map(v => {
-          return React.cloneElement(v.DomType !== 'div' && v.comp || <div>{this.childrenDom(v)}</div>, {
+          return React.cloneElement(v.DomType !== 'div' && v.comp ||
+            <div>
+              {
+                (item.style.display &&
+                  <div style={{
+                    ...v.style,
+                    position: v.style.display ? '' : 'absolute',
+                    width: v.style.width && v.style.width,
+                    height: v.style.height && v.style.height,
+                  }}>
+                    {this.childrenDom(v)}
+                  </div>
+                  || this.childrenDom(v))
+              }
+            </div>,
+            {
               style: {
                 ...v.style,
                 ...{
+                  pointerEvents: 'none',
                   position: item.style.display ? '' : 'absolute',
                   top: `${item.style.display ? 0 : v.position.y}px`,
                   left: `${item.style.display ? 0 : v.position.x}px`,
@@ -60,6 +76,12 @@ class DraggableContent extends Component {
       paddingBottom: '0',
       paddingLeft: '0',
     };
+    const marginList = {
+      marginTop: '0',
+      marginRight: '0',
+      marginBottom: '0',
+      marginLeft: '0',
+    };
     const { scaleValue } = this.state;
     return (
       <>
@@ -83,6 +105,10 @@ class DraggableContent extends Component {
               background: '#fff',
               transform: `scale(${scaleValue / 100})`,
               boxShadow: 'rgb(221, 221, 221) 0px 0px 24px',
+              marginLift: 'auto',
+              marginRight: 'auto',
+              marginTop: 'auto',
+              marginBottom: 'auto',
             },
           }}
           lineStyle={{ zIndex: '49' }}
@@ -106,30 +132,43 @@ class DraggableContent extends Component {
                         overflow: item.DomType === 'div' && 'auto' || '',
                         boxSizing: 'content-box',
                         border:
-                          item.DomType === 'div' &&
+                          (item.DomType === 'div' || displayFix) &&
                           (currentIndex === item.key && currentIndex !== -1
                             ? '1px solid red'
-                            : '1px dashed #ddd'),
+                            : displayFix ? '' : '1px dashed #ddd'),
                         position: displayFix ? '' : 'absolute',
                         zIndex: currentIndex === item.key ? zIndex : item.style && item.style.zIndex || 0,
                       },
                     }
                   }
                 >
-                  {React.cloneElement(item.DomType !== 'div' && item.comp || <div>{this.childrenDom(item)}</div>, {
-                    style: {
-                      ...item.style,
-                      ...{
-                        boxSizing: 'border-box',
-                        pointerEvents: 'none',
-                        overflow: item.DomType === 'div' && 'auto',
-                        margin: '0',
+                  {
+                    item.DomType !== 'div' &&
+                    React.cloneElement(item.comp, {
+                      style: {
+                        ...item.style,
+                        ...{
+                          boxSizing: 'border-box',
+                          pointerEvents: 'none',
+                          position: 'relative',
+                        },
+                        ...marginList,
                       },
-                    },
-                  })}
+                    }) || (displayFix &&
+                      <div style={{
+                        ...item.style,
+                        position: item.style.display ? '' : 'absolute',
+                        overflow: 'auto',
+                        width: item.style.width && item.style.width,
+                        height: item.style.height && item.style.height,
+                      }}>
+                        {this.childrenDom(item)}
+                      </div>
+                      || this.childrenDom(item))
+                  }
                   {currentIndex === item.key && currentIndex !== -1 && (
                     <React.Fragment>
-                      {item.DomType !== 'div' && (
+                      {item.DomType !== 'div' && !displayFix && (
                         <React.Fragment>
                           <div className={styles['top']}/>
                           <div className={styles['bottom']}/>

@@ -210,6 +210,60 @@ class BasicAttribute extends Component {
             />
           </div>
           <div className={styles['line']}></div>
+          <div>
+            <div style={{ display: 'inline-block', width: '100%', verticalAlign: 'top' }}>
+              外边距-margin(px)
+            </div>
+            <div style={{ display: 'inline-block', width: '100%' }}>
+              <div style={{display: 'flex', justifyContent: 'space-between' ,flexWrap: 'wrap'}}>
+                <p style={{width: '25%'}}>上</p>
+                <p style={{width: '25%'}}>右</p>
+                <p style={{width: '25%'}}>下</p>
+                <p style={{width: '25%'}}>左</p>
+                <div style={{width: '25%'}}>
+                  <ChangeNumber
+                    styleName={'marginTop'}
+                    min={-999}
+                    unit={'px'}
+                    objName={'style'}
+                    initData={initData}
+                    {...this.props}
+                  />
+                </div>
+                <div style={{width: '25%'}}>
+                  <ChangeNumber
+                    styleName={'marginRight'}
+                    min={-999}
+                    unit={'px'}
+                    objName={'style'}
+                    initData={initData}
+                    {...this.props}
+                  />
+                </div>
+                <div style={{width: '25%'}}>
+                  <ChangeNumber
+                    styleName={'marginBottom'}
+                    min={-999}
+                    unit={'px'}
+                    objName={'style'}
+                    initData={initData}
+                    {...this.props}
+                  />
+                </div>
+                <div style={{width: '25%'}}>
+                  <ChangeNumber
+                    styleName={'marginLeft'}
+                    min={-999}
+                    unit={'px'}
+                    objName={'style'}
+                    initData={initData}
+                    {...this.props}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles['line']}></div>
           {initData.DomType === 'div' && detailId !== currentIndex && (
             <React.Fragment>
               <div>

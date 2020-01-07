@@ -326,7 +326,7 @@ class HostDetail extends React.Component {
             actionPos={''}
             loading={!!loading.models[modelName]}
           >
-            <div style={{ height: '100vh' }} className={styles['pageStyle']}>
+            <div style={{ height: 'calc(100vh - 66px)' }} className={styles['pageStyle']}>
               {/*组件栏*/}
               <ComponentLibrary interfaceDesign={this.props.interfaceDesign} divKey={key}/>
               {/* 画布区域 */}
