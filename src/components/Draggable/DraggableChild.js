@@ -40,6 +40,7 @@ export default class DraggableChild extends React.Component {
     }
   }
   handleStart = (ev, b) => {
+    ev.stopPropagation();
     const { x, y } = this.state;
     this.lastX = b.lastX - x;
     this.lastY = b.lastY - y;
@@ -48,11 +49,11 @@ export default class DraggableChild extends React.Component {
   };
 
   handleDrag = (ev, b) => {
+    ev.stopPropagation();
     const dragX = b.lastX - this.lastX;
     const dragY = b.lastY - this.lastY;
     const { x, y } = this.props._drag(dragX, dragY);
-    this.setState({ x, y });
-
+    this.setState({ x, y});
     this.props.onDrag(ev, createCoreData(b, {
       originX: dragX,
       originY: dragY,
@@ -62,9 +63,11 @@ export default class DraggableChild extends React.Component {
   };
 
   handleStop = (ev, b) => {
+    ev.stopPropagation();
     const { x, y } = this.state;
     this.props._stop();
     this.props.onStop(ev, createCoreData(b, { x, y }));
+    this.props.onMouseUpCapture({x,y})
   };
 
   render() {
@@ -89,6 +92,7 @@ export default class DraggableChild extends React.Component {
         position={{ x, y }}
       >
         {React.cloneElement(this.props.children, {
+          onClick:e => this.props.onClick(e),
           style,
           className,
           'data-x': x,

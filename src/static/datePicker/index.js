@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { DatePicker } from 'antd';
+import { Button, DatePicker } from 'antd';
 class JhdatePicker extends Component {
   onChange(date, dateString) {
     console.log(date, dateString);
   }
   render() {
-    return <DatePicker onChange={this.onChange.bind(this)} {...this.props} />;
+    const { attribute, style, name } = this.props;
+    return <DatePicker onChange={this.onChange.bind(this)} style={style} {...attribute}/>;
   }
 }
 

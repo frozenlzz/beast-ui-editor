@@ -6,10 +6,10 @@ class Jhbutton extends Component {
     this.state = {};
   }
   render() {
-    const { attribute, newStyles, name } = this.props;
+    const { attribute, style, name } = this.props;
     return (
       // <>
-      <Button {...this.props}>
+      <Button style={style} {...attribute}>
         {name}
       </Button>
       // </>

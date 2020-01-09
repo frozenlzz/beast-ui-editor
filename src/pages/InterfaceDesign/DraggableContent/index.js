@@ -3,61 +3,213 @@ import { modelName, DataToDom } from '../config';
 import { isEmpty, ceil } from 'lodash';
 import { Slider } from 'antd';
 import { DraggableContainer, DraggableChild } from '@/components/Draggable';
+import { Tabs } from 'antd';
+
+const { TabPane } = Tabs;
 import styles from './index.less';
+
+const paddingList = {
+  paddingTop: '0',
+  paddingRight: '0',
+  paddingBottom: '0',
+  paddingLeft: '0',
+};
+const marginList = {
+  marginTop: '0',
+  marginRight: '0',
+  marginBottom: '0',
+  marginLeft: '0',
+};
 
 class DraggableContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scaleValue: 100,
+      scaleValue: 100, // 页面缩放百分比
     };
-  }
-
-  // 画布递归渲染
-  childrenDom(item) {
-    return (
-      <>
-        {!isEmpty(item.children) &&
-        DataToDom(item.children).map(v => {
-          return React.cloneElement(v.DomType !== 'div' && v.comp ||
-            <div>
-              {
-                (item.style.display &&
-                  <div style={{
-                    ...v.style,
-                    position: v.style.display ? '' : 'absolute',
-                    width: v.style.width && v.style.width,
-                    height: v.style.height && v.style.height,
-                  }}>
-                    {this.childrenDom(v)}
-                  </div>
-                  || this.childrenDom(v))
-              }
-            </div>,
-            {
-              style: {
-                ...v.style,
-                ...{
-                  pointerEvents: 'none',
-                  position: item.style.display ? '' : 'absolute',
-                  top: `${item.style.display ? 0 : v.position.y}px`,
-                  left: `${item.style.display ? 0 : v.position.x}px`,
-                  overflow: v.DomType === 'div' && 'auto',
-                  border: this.props.currentIndex === v.key && '1px solid red',
-                },
-              },
-              key: v.key,
-            },
-          );
-        })}
-      </>
-    );
   }
 
   scaleChange(value) {
     this.setState({
       scaleValue: value,
     });
+  }
+
+  //画布递归渲染,可拖拽编辑
+  draggableContainers({ item, position }) {
+    const { currentIndex } = this.props;
+    return (
+      item.style.display ? (
+        !isEmpty(item.children) &&
+        DataToDom(item.children).map((i, j) => {
+          return (
+            <div
+              key={j}
+              onClick={e => this.props.elementClick(e, i)}
+              style={{
+                width: i.style.width || '',
+                height: i.style.height || '',
+              }}
+            >
+              {
+                i.DomType === 'div' &&
+                <div style={{
+                  ...i.style,
+                  border:
+                    (currentIndex === i.key && currentIndex !== -1
+                      ? '1px solid #f5222d'
+                      : i.style.border ? i.style.border : '1px solid #ddd'),
+                }}>
+                  {this.draggableContainers({
+                    item: i,
+                    position: 'relative',
+                  })}
+                </div> ||
+                React.cloneElement(i.comp, {
+                  style: {
+                    ...i.style,
+                    ...{
+                      boxSizing: 'border-box',
+                      pointerEvents: 'none',
+                      position: 'relative',
+                      width: '100%',
+                      border:
+                        (currentIndex === i.key && currentIndex !== -1
+                          ? '1px solid #f5222d'
+                          : i.style.border ? i.style.border : ''),
+                    },
+                  },
+                })
+              }
+            </div>
+          );
+        })) : (
+        <DraggableContainer
+          style={{
+            ...item.style,
+            position: position === 'relative' ? 'relative' : 'absolute',
+            top: `0px`,
+            left: `0px`,
+            width: '100%',
+            height: '100%',
+            overflow: 'auto',
+          }}
+          keys={item.key}
+          drop={this.props.drop}
+          allowDrop={this.props.allowDrop}
+          canvasClick={this.props.canvasClick}
+          autoHeight={true}
+          lineStyle={{ zIndex: '49' }}
+        >
+          {
+            !isEmpty(item.children) &&
+            DataToDom(item.children).map((i, j) => {
+              const PositionI = {
+                x: parseInt(i.position.x),
+                y: parseInt(i.position.y),
+              };
+              return (
+                <DraggableChild key={`_${j}`}
+                                defaultPosition={PositionI}
+                                onClick={e => this.props.elementClick(e, i)}
+                                onMouseUpCapture={e => this.props.MouseUp(e, i.key, i)}>
+                  <div
+                    style={{
+                      ...i.style,
+                      ...!i.style.display && paddingList,
+                      zIndex: currentIndex === i.key ? '98' : i.style && i.style.zIndex || 0,
+                      overflow: i.DomType === 'div' && 'auto' || '',
+                      position: 'absolute',
+                      boxSizing: 'border-box',
+                      border:
+                        (i.DomType === 'div' || i.style.display) &&
+                        (currentIndex === i.key && currentIndex !== -1
+                          ? '1px solid #f5222d'
+                          : '1px solid #ddd'),
+                    }}
+                  >
+                    {
+                      i.DomType === 'div' && this.draggableContainers({ item: i }) ||
+                      i.DomType === 'JhTabs' && this.JhTabsDOM({ item: i }) ||
+                      React.cloneElement(i.comp, {
+                        style: {
+                          ...i.style,
+                          ...{
+                            boxSizing: 'border-box',
+                            pointerEvents: 'none',
+                            position: 'relative',
+                          },
+                          ...marginList,
+                        },
+                      })
+                    }
+                    {currentIndex === i.key && currentIndex !== -1 && (
+                      <React.Fragment>
+                        {i.DomType !== 'div' && (
+                          <React.Fragment>
+                            <div className={styles['top']}/>
+                            <div className={styles['bottom']}/>
+                            <div className={styles['left']}/>
+                            <div className={styles['right']}/>
+                          </React.Fragment>
+                        )}
+                      </React.Fragment>
+                    )}
+                  </div>
+                </DraggableChild>
+              );
+            })
+          }
+        </DraggableContainer>)
+    );
+  }
+
+  //页签组件画布
+  JhTabsDOM({ item }) {
+    const _this = this;
+
+    function callback(key) {
+      new Promise((resolve) =>{
+        resolve();
+      }).then(()=>{
+        _this.props.currentKeyChange(key);
+      });
+    }
+
+    const { currentIndex } = this.props;
+    return (
+      <Tabs defaultActiveKey="0" type="card" style={{ backgroundColor: '#fff' }} onTabClick={callback}>
+        {
+          !isEmpty(item.children) && item.children.map((i, j) => {
+            return (
+              <TabPane tab={i.name} key={i.key}>
+                <div
+                  style={
+                    {
+                      ...i.style,
+                      width: '100%',
+                      minHeight: '300px',
+                      position: 'relative',
+                      boxSizing: 'border-box',
+                      ...currentIndex === i.key && currentIndex !== -1 && { border: '1px solid #f5222d' }
+                      || {
+                        borderWidth: '0px 1px 1px',
+                        borderColor: '#e8e8e8',
+                        borderStyle: 'solid',
+                      },
+                      marginTop: '-17px',
+                      zIndex: currentIndex === i.key ? '98' : i.style && i.style.zIndex || 0,
+                    }}
+                  onClick={e => this.props.elementClick(e, i)}
+                >
+                  {this.draggableContainers({ item: i })}
+                </div>
+              </TabPane>
+            );
+          })
+        }
+      </Tabs>
+    );
   }
 
   render() {
@@ -70,32 +222,9 @@ class DraggableContent extends Component {
     } = this.props;
     // 操作中的元素置顶
     const zIndex = '98';
-    const paddingList = {
-      paddingTop: '0',
-      paddingRight: '0',
-      paddingBottom: '0',
-      paddingLeft: '0',
-    };
-    const marginList = {
-      marginTop: '0',
-      marginRight: '0',
-      marginBottom: '0',
-      marginLeft: '0',
-    };
     const { scaleValue } = this.state;
     return (
       <>
-        {/*<div*/}
-        {/*  style={{*/}
-        {/*    overflow: 'auto',*/}
-        {/*    position: 'relative',*/}
-        {/*    background: '#fff',*/}
-        {/*    transform: `scale(${scaleValue/100})`,*/}
-        {/*  }}*/}
-        {/*  onDrop={event => this.props.drop(event)}*/}
-        {/*  onDragOver={event => this.props.allowDrop(event)}*/}
-        {/*  onClick={() => this.props.canvasClick()}*/}
-        {/*>*/}
         <DraggableContainer
           drop={this.props.drop}
           allowDrop={this.props.allowDrop}
@@ -105,12 +234,13 @@ class DraggableContent extends Component {
               background: '#fff',
               transform: `scale(${scaleValue / 100})`,
               boxShadow: 'rgb(221, 221, 221) 0px 0px 24px',
-              marginLift: 'auto',
+              marginLeft: 'auto',
               marginRight: 'auto',
               marginTop: 'auto',
               marginBottom: 'auto',
             },
           }}
+          keys={'-1'}
           lineStyle={{ zIndex: '49' }}
           autoHeight={autoHeight}
         >
@@ -120,22 +250,23 @@ class DraggableContent extends Component {
               y: parseInt(item.position.y),
             };
             return (
-              <DraggableChild key={index} defaultPosition={Position}>
+              <DraggableChild key={index}
+                              defaultPosition={Position}
+                              onClick={e => this.props.elementClick(e, item)}
+                              onMouseUpCapture={e => this.props.MouseUp(e, item.key, item)}>
                 <div
-                  onClick={e => this.props.elementClick(e, item)}
-                  onMouseUpCapture={e => this.props.MouseUp(e, item.key, item)}
                   style={
                     {
                       ...item.style,
-                      ...paddingList,
+                      ...!item.style.display && paddingList,
                       ...{
                         overflow: item.DomType === 'div' && 'auto' || '',
-                        boxSizing: 'content-box',
+                        boxSizing: 'border-box',
                         border:
                           (item.DomType === 'div' || displayFix) &&
                           (currentIndex === item.key && currentIndex !== -1
-                            ? '1px solid red'
-                            : displayFix ? '' : '1px dashed #ddd'),
+                            ? '1px solid #f5222d'
+                            : displayFix ? '' : '1px solid #ddd'),
                         position: displayFix ? '' : 'absolute',
                         zIndex: currentIndex === item.key ? zIndex : item.style && item.style.zIndex || 0,
                       },
@@ -143,7 +274,8 @@ class DraggableContent extends Component {
                   }
                 >
                   {
-                    item.DomType !== 'div' &&
+                    item.DomType === 'div' && this.draggableContainers({ item }) ||
+                    item.DomType === 'JhTabs' && this.JhTabsDOM({ item }) ||
                     React.cloneElement(item.comp, {
                       style: {
                         ...item.style,
@@ -154,17 +286,7 @@ class DraggableContent extends Component {
                         },
                         ...marginList,
                       },
-                    }) || (displayFix &&
-                      <div style={{
-                        ...item.style,
-                        position: item.style.display ? '' : 'absolute',
-                        overflow: 'auto',
-                        width: item.style.width && item.style.width,
-                        height: item.style.height && item.style.height,
-                      }}>
-                        {this.childrenDom(item)}
-                      </div>
-                      || this.childrenDom(item))
+                    })
                   }
                   {currentIndex === item.key && currentIndex !== -1 && (
                     <React.Fragment>
@@ -183,7 +305,6 @@ class DraggableContent extends Component {
             );
           })}
         </DraggableContainer>
-        {/*</div>*/}
         <div style={{ position: 'fixed', bottom: '0', right: '300px', width: '200px', zIndex: '100' }}>
           <Slider tipFormatter={value => `${value}%`}
                   min={50}
@@ -208,5 +329,6 @@ DraggableContent.defaultProps = {
   containerStyle: {}, // 当前画布的样式表
   autoHeight: false, // 画布可自适应高度，可延申
   displayFix: false, // 画布是否为弹性布局画布（编辑画布时）
+  currentKeyChange: null, // 切换当前选中的组件key
 };
 export default DraggableContent;

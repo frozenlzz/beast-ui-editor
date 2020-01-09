@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Collapse, Icon, Popover, Input } from 'antd';
-import { BOM_TYPE, getKeyToElement, modelName } from '../config';
+import { BOM_TYPE, getKeyToElement, modelName, randomString } from '../config';
 import { isEmpty } from 'lodash';
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -54,6 +54,29 @@ const config = [
       height: '100px',
     },
     children: [],
+  },
+  {
+    name: '页签',
+    DomType: 'JhTabs',
+    attribute: {},
+    style: {
+      width: '500px',
+      height: 'auto',
+    },
+    children: [
+      {
+        name: '标签画布1',
+        DomType: 'div',
+        position: {x: 0, y: 0},
+        attribute: {},
+        key: randomString(),
+        style: {
+          width: '100%',
+          height: '300px',
+        },
+        children: [],
+      },
+    ],
   },
 ];
 
@@ -154,18 +177,20 @@ class ComponentLibrary extends Component {
                 <div className={styles['line']}></div>
                 <div style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent: 'center',
                 }}>
-                  <Button type="primary"
-                          disabled={isEmpty(revokeList)}
-                          onClick={this.revokeList.bind(this)}>
-                    <Icon type="left"/>撤销
-                  </Button>
-                  <Button type="primary"
-                          disabled={isEmpty(contraryRevokeList)}
-                          onClick={this.contraryRevokeList.bind(this)}>
-                    反撤销<Icon type="right"/>
-                  </Button>
+                  <Button.Group>
+                    <Button type="primary"
+                            disabled={isEmpty(revokeList)}
+                            onClick={this.revokeList.bind(this)}>
+                      <Icon type="left"/>撤销
+                    </Button>
+                    <Button type="primary"
+                            disabled={isEmpty(contraryRevokeList)}
+                            onClick={this.contraryRevokeList.bind(this)}>
+                      反撤销<Icon type="right"/>
+                    </Button>
+                  </Button.Group>
                 </div>
               </div>
             </Panel>

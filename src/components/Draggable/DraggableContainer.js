@@ -29,7 +29,7 @@ export default class DraggableContainer extends React.Component {
     activeClassName: 'active',
     limit: true,
     lineStyle: {},
-    autoHeight: false
+    autoHeight: true
   };
 
   constructor(props) {
@@ -284,7 +284,7 @@ export default class DraggableContainer extends React.Component {
   checkDragOut({ x, y }, target) {
     const maxLeft = this.$.clientWidth - target.w;
     const maxTop = this.$.clientHeight - target.h;
-    const { autoHeight } = this.props
+    const { autoHeight } = this.props;
     let limitX = x;
     let limitY = y;
 
@@ -366,7 +366,8 @@ export default class DraggableContainer extends React.Component {
       <Container style={style} ref={ref => (this.$ = ref)}
                  onDrop={event => this.props.drop(event)}
                  onDragOver={event => this.props.allowDrop(event)}
-                 onClick={() => this.props.canvasClick()}>
+                 onClick={() => this.props.canvasClick()}
+                 keys={this.props.keys && this.props.keys || -1}>
         {this._renderChildren()}
         {this._renderGuideLine()}
       </Container>

@@ -3,6 +3,9 @@ import { modelName } from './config';
 import { DataToDom } from '../InterfaceDesign/config';
 import { connect } from 'dva';
 import isEmpty from 'lodash/isEmpty';
+import { Tabs } from 'antd';
+
+const { TabPane } = Tabs;
 
 @connect(interfaceDesign => interfaceDesign)
 class ReleaseVersion extends Component {
@@ -65,8 +68,8 @@ class ReleaseVersion extends Component {
       <>
         {!isEmpty(item.children) &&
         DataToDom(item.children).map(v => {
-          return React.cloneElement(v.DomType !== 'div' && v.comp ||
-            <div>
+          return React.cloneElement(
+            v.DomType === 'div' && <div>
               {
                 (item.style.display &&
                   <div style={{
@@ -79,7 +82,9 @@ class ReleaseVersion extends Component {
                   </div>
                   || this.childrenDom(v))
               }
-            </div>,
+            </div> ||
+            v.DomType === 'JhTabs' && <div>{this.JhTabsDOM(v)}</div> ||
+            v.comp,
             {
               key: v.key,
               style: {
@@ -89,12 +94,44 @@ class ReleaseVersion extends Component {
                   top: `${v.position.y || 0}${item.style.display ? '' : 'px'}`,
                   left: `${v.position.x || 0}${item.style.display ? '' : 'px'}`,
                   overflow: v.DomType === 'div' && 'auto',
+                  border: v.DomType === 'div' && '1px solid #ccc',
                 },
               },
             },
           );
         })}
       </>
+    );
+  }
+  //页签组件画布
+  JhTabsDOM(item) {
+    return (
+      <Tabs defaultActiveKey="0" type="card" style={{ backgroundColor: '#fff' }}>
+        {
+          !isEmpty(item.children) && item.children.map((i, j) => {
+            return (
+              <TabPane tab={i.name} key={i.key}>
+                <div
+                  style={
+                    {
+                      ...i.style,
+                      width: '100%',
+                      minHeight: '300px',
+                      position: 'relative',
+                      boxSizing: 'border-box',
+                      borderWidth: '0px 1px 1px',
+                      borderColor: '#e8e8e8',
+                      borderStyle: 'solid',
+                      marginTop: '-17px',
+                    }}
+                >
+                  {this.childrenDom(i)}
+                </div>
+              </TabPane>
+            );
+          })
+        }
+      </Tabs>
     );
   }
 
@@ -104,7 +141,11 @@ class ReleaseVersion extends Component {
       <div style={{ position: 'relative' }}>
         {!isEmpty(initData) &&
         initData.map((item, i) => {
-          return React.cloneElement(item.DomType !== 'div' && item.comp || <div>{this.childrenDom(item)}</div>, {
+          return React.cloneElement(
+            item.DomType === 'div' && <div>{this.childrenDom(item)}</div> ||
+            item.DomType === 'JhTabs' && <div>{this.JhTabsDOM(item)}</div> ||
+            item.comp,
+            {
               key: i,
               style: {
                 ...item.style,
@@ -113,6 +154,7 @@ class ReleaseVersion extends Component {
                   top: `${item.position.y || 0}px`,
                   left: `${item.position.x || 0}px`,
                   overflow: item.DomType === 'div' && 'auto',
+                  border: item.DomType === 'div' &&'1px solid #ccc',
                 },
               },
             },

@@ -6,97 +6,37 @@ import { cloneDeep, isEmpty } from 'lodash';
 // 第三个参数为预留自定义操作
 export default createCRUDModel(modelName, services, {
   state: {
-    initData: [
-      {
-        name: '账号',
-        key: '0001',
-        DomType: 'Jhinput',
-        position: {
-          x: 400,
-          y: 120,
-        },
-        attribute: {
-          placeholder: '输入账号',
-        },
-        style: {
-          width: '200px',
-          height: '32px',
-        },
+    initData: [{
+      'name': '画布',
+      'DomType': 'div',
+      'attribute': {},
+      'style': {
+        'width': '1000px',
+        'height': '300px',
+        'alignItems': 'flex-start',
+        'flexDirection': 'row',
+        'justifyContent': 'flex-start',
+        'background': '#fff'
       },
-      {
-        name: '密码',
-        key: '0002',
-        DomType: 'Jhinput',
-        position: {
-          x: 400,
-          y: 180,
-        },
-        attribute: {
-          placeholder: '输入密码',
-        },
-        style: {
-          width: '200px',
-          height: '32px',
-        },
-      },
-      {
-        name: '登录',
-        key: '0003',
-        DomType: 'Jhbutton',
-        position: {
-          x: 400,
-          y: 260,
-        },
-        style: {
-          width: '100px',
-          height: '32px',
-        },
-      },
-      {
-        name: '画布',
-        key: '0004',
-        DomType: 'div',
-        position: {
-          x: 400,
-          y: 300,
-        },
-        style: {
-          width: '500px',
-          height: '200px',
-        },
-        children: [
-          {
-            name: '账号',
-            key: '0005',
-            DomType: 'Jhinput',
-            position: {
-              x: 50,
-              y: 20,
-            },
-            attribute: {
-              placeholder: '输入账号',
-            },
-            style: {
-              width: '200px',
-              height: '32px',
-            },
-          },
-          {
-            name: '注册',
-            key: '0006',
-            DomType: 'Jhbutton',
-            position: {
-              x: 100,
-              y: 100,
-            },
-            style: {
-              width: '100px',
-              height: '32px',
-            },
-          },
-        ],
-      },
-    ],
+      'children': [{
+        'name': '输入框',
+        'DomType': 'Jhinput',
+        'attribute': { 'placeholder': '输入框' },
+        'style': { 'width': '200px' },
+        'position': { 'x': 33, 'y': 17 },
+        'key': 'rVtjAMduM8CsSvqd',
+      }, {
+        'name': '输入框',
+        'DomType': 'Jhinput',
+        'attribute': { 'placeholder': '输入框' },
+        'style': { 'width': '200px' },
+        'position': { 'x': 333, 'y': 17 },
+        'key': 'rVtjAMduM8CsSvqY',
+      }],
+      'position': { 'x': '299', 'y': '100' },
+      'key': 'hZJ5fo1VggUhQs1R',
+    }],
+
     currentIndex: -1, // 当前选中元素组件key值
     objectVisible: false, // 项目选择左侧栏栏目是否弹出(true)
     revokeList: [], // 存储操作数据，用于撤销时使用

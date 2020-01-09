@@ -106,12 +106,12 @@ class HostDetail extends React.Component {
 
   // 点击当前元素，弹起触发
   MouseUp(e, index, item) {
-    e.persist();
-    console.log('选中对象最新位置》》》', e.target.dataset.x, e.target.dataset.y);
+    // e.persist();
+    // console.log('选中对象最新位置》》》', e.target.dataset.x, e.target.dataset.y);
     // 如果位置不发生改变，不触发更新数据事件
-    if (item.position.x - e.target.dataset.x || item.position.y - e.target.dataset.y) {
+    if (item.position.x - e.x || item.position.y - e.y) {
       let newItem = item;
-      newItem.position = { x: e.target.dataset.x, y: e.target.dataset.y };
+      newItem.position = { x: e.x, y: e.y };
       this.editAttribute(newItem, index);
     }
   }
@@ -196,13 +196,21 @@ class HostDetail extends React.Component {
       },
     });
   }
+  // 当前选中的组件对应key值
+  currentKeyChange(key = -1) {
+    this.props.dispatch({
+      type: `${modelName}/keyChange`,
+      payload: { key: key },
+    });
+  }
 
   canvasClick() {
     const { match } = this.props;
     const key = match && match.params.id;
-    this.setState({
-      currentIndex: key,
-    });
+    // this.setState({
+    //   currentIndex: key,
+    // });
+    this.currentKeyChange(key);
   }
 
   elementClick(e, item) {
@@ -211,9 +219,10 @@ class HostDetail extends React.Component {
     this.setState(
       {
         currentData: item,
-        currentIndex: item.key,
+        // currentIndex: item.key,
       },
       () => {
+        this.currentKeyChange(item.key);
         console.log('选中对象索引》》》', this.state.currentIndex);
       },
     );
@@ -309,7 +318,6 @@ class HostDetail extends React.Component {
       overflowY: 'auto',
       display: displayFix && 'flex' || '',
       boxSizing: 'content-box',
-      margin: 'auto',
       // userSelect: 'none',
     };
     return (
@@ -330,19 +338,21 @@ class HostDetail extends React.Component {
               {/*组件栏*/}
               <ComponentLibrary interfaceDesign={this.props.interfaceDesign} divKey={key}/>
               {/* 画布区域 */}
-              <DraggableContent
-                drop={this.drop.bind(this)}
-                allowDrop={this.allowDrop.bind(this)}
-                canvasClick={this.canvasClick.bind(this)}
-                elementClick={this.elementClick.bind(this)}
-                MouseUp={this.MouseUp.bind(this)}
-                showDetail={this.showDetail.bind(this)}
-                currentIndex={currentIndex}
-                newConfig={newConfig}
-                containerStyle={containerStyle}
-                autoHeight={true}
-                displayFix={displayFix}
-              />
+              <div style={{height: '100%', overflow: 'auto'}}>
+                <DraggableContent
+                  drop={this.drop.bind(this)}
+                  allowDrop={this.allowDrop.bind(this)}
+                  canvasClick={this.canvasClick.bind(this)}
+                  elementClick={this.elementClick.bind(this)}
+                  MouseUp={this.MouseUp.bind(this)}
+                  showDetail={this.showDetail.bind(this)}
+                  currentIndex={currentIndex}
+                  newConfig={newConfig}
+                  containerStyle={containerStyle}
+                  autoHeight={true}
+                  displayFix={displayFix}
+                />
+              </div>
               {/*属性栏*/}
               {currentIndex !== -1 &&
               <PropertySettings

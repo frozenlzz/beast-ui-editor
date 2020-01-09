@@ -6,9 +6,9 @@ class Jhinput extends Component {
     this.state = {};
   }
   render() {
-    const { attribute, newStyles} = this.props;
+    const { attribute, style} = this.props;
     return (
-      <Input {...this.props}/>
+      <Input style={{...style}} {...attribute}/>
     );
   }
 }

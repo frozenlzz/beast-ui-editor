@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Input, Radio, Button } from 'antd';
+import { Input, Radio, Button, Icon } from 'antd';
 import ChangeNumber from '@/components/ChangeNumber';
 import styles from './index.less';
+import { modelName, randomString } from '@/pages/InterfaceDesign/config';
 /**
  * 基础属性功能
  * */
@@ -281,6 +282,39 @@ class BasicAttribute extends Component {
               <div className={styles['line']}></div>
             </React.Fragment>
           )}
+          {
+            initData.DomType === 'JhTabs' && (
+              <React.Fragment>
+                <div>
+                  <Button
+                    style={{ width: '100%' }}
+                    type="primary"
+                    onClick={e => {
+                      const newData = {
+                        name: '页签画布',
+                        DomType: 'div',
+                        position: {x: 0, y: 0},
+                        attribute: {},
+                        key: randomString(),
+                        style: {
+                          width: '100%',
+                          height: '300px',
+                        },
+                        children: [],
+                      };
+                      this.props.dispatch({
+                        type: `${modelName}/add`,
+                        payload: { newObj: newData, index: currentIndex === '-1' || currentIndex === -1 ? -1 : currentIndex },
+                      });
+                    }}
+                  >
+                    <Icon type="plus" /> 添加页签项
+                  </Button>
+                </div>
+                <div className={styles['line']}></div>
+              </React.Fragment>
+            )
+          }
         </div>
       </div>
     );

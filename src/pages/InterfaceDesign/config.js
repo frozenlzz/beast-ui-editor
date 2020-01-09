@@ -27,7 +27,7 @@ export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute =
   newStyles.width = '100%';
   if (JH_DOM[DomType]) {
     let Data = JH_DOM[DomType];
-    bom = <Data { ...attribute } style={{ ...newStyles }} name={name} />;
+    bom = <Data attribute={{ ...attribute }} style={{ ...newStyles }} name={name} />;
   } else {
     bom = (
       <DomType {...attribute} style={{ ...newStyles }} >{ name }</DomType>

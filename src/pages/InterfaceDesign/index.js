@@ -96,12 +96,12 @@ export default class InterfaceDesign extends Component {
 
   // 点击当前元素，弹起触发
   MouseUp(e, index, item) {
-    e.persist();
-    console.log('选中对象最新位置》》》', e.target.dataset.x, e.target.dataset.y);
+    // e.persist();
+    console.log('选中对象最新位置》》》', e.x, e.y);
     // 如果位置不发生改变，不触发更新数据事件
-    if (item.position.x - e.target.dataset.x || item.position.y - e.target.dataset.y) {
+    if (item.position.x - e.x || item.position.y - e.y) {
       let newItem = item;
-      newItem.position = { x: e.target.dataset.x, y: e.target.dataset.y };
+      newItem.position = { x: e.x, y: e.y };
       this.editAttribute(newItem, index);
     }
   }
@@ -121,6 +121,8 @@ export default class InterfaceDesign extends Component {
     ev.preventDefault();
     ev.stopPropagation();
     ev.persist();
+    const keys = ev.target && ev.target.getAttribute('keys') || -1;
+    console.log('ev', ev.target.getAttribute('keys'));
     const config = this.state.config;
     let data = ev.dataTransfer.getData('Text');
     if (data) {
@@ -133,7 +135,7 @@ export default class InterfaceDesign extends Component {
       newData.position['y'] = ev.nativeEvent.offsetY - offsetY; // 鼠标距离放置容器的原点y轴 减去 鼠标距离拖拽元素的原点y轴
       newData.key = randomString();
       newData = omit(newData, ['offsetX', 'offsetY']);
-      if (index === '-1') {
+      if (keys) {
         this.setState(
           {
             config: [...config, newData],
@@ -142,12 +144,9 @@ export default class InterfaceDesign extends Component {
           () => {
             this.props.dispatch({
               type: `${modelName}/add`,
-              payload: { newObj: newData, index: -1 },
+              payload: { newObj: newData, index: keys === '-1' || keys === -1 ? -1 : keys },
             });
             this.currentKeyChange(newData.key);
-            // this.setState({
-            //   currentIndex: newData.key,
-            // });
           },
         );
       }
@@ -188,9 +187,6 @@ export default class InterfaceDesign extends Component {
 
   canvasClick() {
     this.currentKeyChange(-1);
-    // this.setState({
-    //   currentIndex: -1,
-    // });
   }
 
   elementClick(e, item) {
@@ -239,6 +235,7 @@ export default class InterfaceDesign extends Component {
             currentIndex={currentIndex}
             newConfig={newConfig}
             containerStyle={containerStyle}
+            currentKeyChange={this.currentKeyChange.bind(this)}
             autoHeight={true}
           />
           {/*属性栏*/}
