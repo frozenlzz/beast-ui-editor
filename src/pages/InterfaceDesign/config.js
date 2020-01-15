@@ -1,8 +1,6 @@
 import { appConfig } from '@/appConfig';
 import React from 'react';
 import { isEmpty, cloneDeep, isArray, forEach } from 'lodash-es';
-import * as JH_DOM from 'jh-lib';
-import { attributesToDOM } from '@/helpers/loader';
 
 const config = appConfig.INTERFACE_DESIGN;
 
@@ -11,50 +9,7 @@ export const modelName = config.modelName;
 export const api = config.api;
 export const cn = config.cn;
 
-// export const breadcrumbList = [
-//   {
-//     title: '测评报告管理',
-//   },
-//   {
-//     title: '报告列表',
-//   },
-// ];
-
 export default config;
-
-// 输出对应的DomType功能模块
-export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute = {} }) => {
-  let newStyles = cloneDeep(style);
-  let newAttribute = cloneDeep(attribute);
-  let bom = null;
-  if (!isEmpty(newAttribute)) {
-    for (let key in newAttribute) {
-      if (newAttribute.hasOwnProperty(key) && newAttribute[key]['$$_type'])
-        newAttribute[key]['$$_type'] === 'jsx' && (newAttribute[key] = attributesToDOM(newAttribute[key]['$$_type'], newAttribute[key]['$$_body']));
-    }
-  }
-  newStyles.width = '100%';
-  if (JH_DOM[DomType]) {
-    let Data = JH_DOM[DomType];
-    bom = <Data {...newAttribute} style={{ ...newStyles }}></Data>;
-  } else {
-    bom = (
-      <div>{name}</div>
-    );
-  }
-  return bom;
-};
-// 将数据转换成可渲染页面数据格式
-export const DataToDom = data => {
-  if (!isEmpty(data) && isArray(data)) {
-    let newData = cloneDeep(data);
-    return newData.map((item, index) => {
-      const { DomType = '', name = 'demo1', style = {}, attribute = {} } = item;
-      item.comp = BOM_TYPE({ DomType, name, style, attribute });
-      return item;
-    });
-  }
-};
 
 /**
  * 生成随机字符串(可指定长度)

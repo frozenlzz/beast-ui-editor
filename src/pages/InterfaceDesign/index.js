@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
 import { connect } from 'dva';
-import { modelName, DataToDom, randomString } from './config';
+import { modelName, randomString } from './config';
+import { DataToDom } from '@/helpers/loader';
 import { isEmpty, omit } from 'lodash-es';
 
 import ComponentLibrary from './ComponentLibrary';

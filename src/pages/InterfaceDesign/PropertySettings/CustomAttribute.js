@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Input, Switch, Icon, Select } from 'antd';
-import * as JH_DOM from 'jh-lib';
 import * as indexConfig from 'jh-lib/es/indexConfig';
 import { isEmpty } from 'lodash-es';
 
@@ -167,8 +166,7 @@ class CustomAttribute extends Component {
                     ) ||
                     item.body['editType'] === 'CHECKBOX' && (
                       <AttributeSwitch defaultValue={defaultValue}
-                                       currentIndex={currentIndex}
-                      ></AttributeSwitch>
+                                       currentIndex={currentIndex}></AttributeSwitch>
                     ) ||
                     <AttributeInput defaultValue={defaultValue}
                                     currentIndex={currentIndex}></AttributeInput>

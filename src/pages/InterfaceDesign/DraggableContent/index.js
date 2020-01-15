@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { modelName, DataToDom } from '../config';
+import { modelName } from '../config';
+import { DataToDom } from '@/helpers/loader';
 import { isEmpty, ceil } from 'lodash-es';
 import { Slider } from 'antd';
 import { DraggableContainer, DraggableChild } from '@/components/Draggable';
