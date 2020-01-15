@@ -1,4 +1,4 @@
-import { isEmpty, isArray, isObject, forEach } from 'lodash';
+import { isEmpty, isArray, isObject, forEach } from 'lodash-es';
 
 export const formatFilter = (searchData = {}) => {
   const filter = {

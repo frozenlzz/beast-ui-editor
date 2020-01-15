@@ -1,4 +1,4 @@
-import isEmpty  from 'lodash/isEmpty';
+import isEmpty  from 'lodash-es/isEmpty';
 
 export const formatCheckErr = function(errMsg, paramObj) {
   let reMsg = errMsg;

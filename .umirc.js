@@ -67,7 +67,8 @@ export default {
     //   .add(require('path').resolve(__dirname, 'src/pages/User/Login.js'))
 
     // 设置 alias
-    // config.resolve.alias.set('utils', require('path').resolve(__dirname, 'src/utils'),);
+    config.resolve.alias.set('jh-utils', require('path').resolve(__dirname, '../jh-utils'));
+    config.resolve.alias.set('jh-lib', require('path').resolve(__dirname, '../jh-lib'));
 
     // // 删除进度条插件
     // config.plugins.delete('progress');

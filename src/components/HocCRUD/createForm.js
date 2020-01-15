@@ -1,5 +1,5 @@
 import React from 'react';
-import { map, omit } from 'lodash';
+import { map, omit } from 'lodash-es';
 import { Col, Form } from 'antd';
 import zh_cn from '@/locales/zh-CN';
 import { formatMsgByCn, myFormatMessage } from '@/utils/localeUtils';

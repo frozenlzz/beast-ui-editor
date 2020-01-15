@@ -1,7 +1,9 @@
 import { appConfig } from '@/appConfig';
 import React from 'react';
-import { isEmpty, cloneDeep, isArray } from 'lodash';
-import * as JH_DOM from '@/static/config';
+import { isEmpty, cloneDeep, isArray, forEach } from 'lodash-es';
+import * as JH_DOM from 'jh-lib';
+import { JhTabs } from '@/static/config';
+
 const config = appConfig.INTERFACE_DESIGN;
 
 export const appCode = config.appCode;
@@ -23,14 +25,21 @@ export default config;
 // 输出对应的DomType功能模块
 export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute = {} }) => {
   let newStyles = cloneDeep(style);
+  let newAttribute = cloneDeep(attribute);
   let bom = null;
+  if (!isEmpty(newAttribute)) {
+    for (let key in newAttribute) {
+      if (newAttribute.hasOwnProperty(key) && newAttribute[key]['$$_type'])
+        newAttribute[key]['$$_type'] === 'jsx' && (newAttribute[key] = attributesToDOM(newAttribute[key]['$$_type'], newAttribute[key]['$$_body']));
+    }
+  }
   newStyles.width = '100%';
   if (JH_DOM[DomType]) {
     let Data = JH_DOM[DomType];
-    bom = <Data attribute={{ ...attribute }} style={{ ...newStyles }} name={name} />;
+    bom = <Data {...newAttribute} style={{ ...newStyles }}></Data>;
   } else {
     bom = (
-      <DomType {...attribute} style={{ ...newStyles }} >{ name }</DomType>
+      <div>{name}</div>
     );
   }
   return bom;
@@ -88,6 +97,7 @@ function getElementToKey() {
     return newData;
   };
 }
+
 export const getKeyToElement = getElementToKey();
 
 // 对应添加对象
@@ -123,7 +133,7 @@ export function editChildrenData(initData, key, data) {
   initData.forEach((v, i) => {
     if (v.key === key) {
       for (let j in v) {
-        if (j !== 'key') {
+        if (j !== 'key' && v.hasOwnProperty(j)) {
           v[j] = typeof data[j] !== 'undefined' ? (data[j] !== '' ? data[j] : '') : v[j];
         }
       }
@@ -132,4 +142,23 @@ export function editChildrenData(initData, key, data) {
       editChildrenData(v.children, key, data);
     }
   });
+}
+
+// 将属性实体转换为对应jsx
+export function attributesToDOM (type, body) {
+  if(type === 'jsx') {
+    if(!isEmpty(body)){
+       return body.map((item, index) => {
+         if(item['$$_type'] === 'component' && !isEmpty(item['$$_body'])){
+           const newBody = cloneDeep(item['$$_body']);
+           if(JH_DOM[newBody['DomType']]){
+             const Data = JH_DOM[newBody['DomType']];
+             const newAttribute = newBody['attribute'] || {};
+             const newStyle = newBody['style'] || {};
+             return <Data {...newAttribute} style={{ ...newStyle }} key={index}></Data>;
+           }
+         }
+      })
+    }
+  }
 }

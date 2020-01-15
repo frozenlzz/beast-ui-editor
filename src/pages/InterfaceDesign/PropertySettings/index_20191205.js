@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Input, InputNumber } from 'antd';
 import { connect } from 'dva';
-import { cloneDeep, isString, isNumber, isNaN, isObject } from 'lodash';
+import { cloneDeep, isString, isNumber, isNaN, isObject } from 'lodash-es';
 
 class ChangeNumber extends Component {
   static defaultProps = {

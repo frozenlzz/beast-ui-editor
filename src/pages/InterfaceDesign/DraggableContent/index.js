@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { modelName, DataToDom } from '../config';
-import { isEmpty, ceil } from 'lodash';
+import { isEmpty, ceil } from 'lodash-es';
 import { Slider } from 'antd';
 import { DraggableContainer, DraggableChild } from '@/components/Draggable';
 import { Tabs } from 'antd';
@@ -138,6 +138,7 @@ class DraggableContent extends Component {
                             boxSizing: 'border-box',
                             pointerEvents: 'none',
                             position: 'relative',
+                            width: '100%',
                           },
                           ...marginList,
                         },
@@ -283,6 +284,7 @@ class DraggableContent extends Component {
                           boxSizing: 'border-box',
                           pointerEvents: 'none',
                           position: 'relative',
+                          width: '100%',
                         },
                         ...marginList,
                       },

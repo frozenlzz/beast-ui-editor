@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import { createDetail } from '@/components/HocCRUD';
 import { modelName, DataToDom, randomString, getKeyToElement } from '../config';
 import PageItem from '@/components/PageItem';
-import { isEmpty, omit, cloneDeep } from 'lodash';
+import { isEmpty, omit, cloneDeep } from 'lodash-es';
 import ComponentLibrary from '../ComponentLibrary';
 import PropertySettings from '../PropertySettings';
 import DraggableContent from '../DraggableContent';

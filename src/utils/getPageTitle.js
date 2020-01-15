@@ -1,6 +1,6 @@
 //import { formatMessage } from 'umi/locale';
 import pathToRegexp from 'path-to-regexp';
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash-es/isEqual';
 import memoizeOne from 'memoize-one';
 import { menu, title } from '../defaultSettings';
 

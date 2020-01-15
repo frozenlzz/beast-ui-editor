@@ -1,8 +1,8 @@
 import { formatMessage } from 'umi-plugin-locale';
 import zh_cn from '@/locales/zh-CN';
-import isString from 'lodash/isString';
-import isEmpty from 'lodash/isEmpty';
-import trim from 'lodash/trim';
+import isString from 'lodash-es/isString';
+import isEmpty from 'lodash-es/isEmpty';
+import trim from 'lodash-es/trim';
 import { recursiveFind } from '@/utils/ArrayUtils';
 import { suffix } from '@/defaultSettings';
 import { getStorage, setStorage } from '@/utils/utils';

@@ -1,50 +1,47 @@
 import React, { Component } from 'react';
 import { Button, Collapse, Icon, Popover, Input } from 'antd';
 import { BOM_TYPE, getKeyToElement, modelName, randomString } from '../config';
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import router from 'umi/router';
 import Link from 'umi/link';
 import styles from './index.less';
 import PageTree from './PageTree';
 import ProjectDrawer from './ProjectDrawer';
 import { connect } from 'dva';
+import * as JH_DOM from 'jh-lib';
+import * as indexConfig from 'jh-lib/es/indexConfig';
 
 const { Search } = Input;
 const { Panel } = Collapse;
+let newJH_DOM = [];
+for (let JH_item in JH_DOM) {
+  if (JH_item !== 'PROP_TYPES') {
+    let newConfig = {};
+    /**
+     * @param item
+     * 将默认属性添加到对应的设计器组件中
+     * */
+    if (indexConfig[`${JH_item}Config`] && !isEmpty(indexConfig[`${JH_item}Config`]['basic'])) {
+      for (let item in indexConfig[`${JH_item}Config`]['basic']) {
+        if (indexConfig[`${JH_item}Config`]['basic'].hasOwnProperty(item)) {
+          newConfig[item] = indexConfig[`${JH_item}Config`]['basic'][item].defaultValue || '';
+        }
+      }
+    }
+    newJH_DOM.push(
+      {
+        name: JH_item,
+        DomType: JH_item,
+        attribute: {
+          ...newConfig,
+        },
+        style: {},
+      },
+    );
+  }
+}
 const config = [
-  {
-    name: '按钮',
-    DomType: 'Jhbutton',
-    attribute: {
-      type: 'primary',
-    },
-    style: {},
-  },
-  {
-    name: '输入框',
-    DomType: 'Jhinput',
-    attribute: {
-      placeholder: '输入框',
-    },
-    style: {
-      width: '200px',
-    },
-  },
-  {
-    name: '日历',
-    DomType: 'JhdatePicker',
-    attribute: {},
-    style: {},
-  },
-  {
-    name: '文本',
-    DomType: 'p',
-    attribute: {},
-    style: {
-      width: '100px',
-      height: 'auto',
-    },
-  },
+  ...newJH_DOM,
   {
     name: '画布',
     DomType: 'div',
@@ -67,7 +64,7 @@ const config = [
       {
         name: '标签画布1',
         DomType: 'div',
-        position: {x: 0, y: 0},
+        position: { x: 0, y: 0 },
         attribute: {},
         key: randomString(),
         style: {

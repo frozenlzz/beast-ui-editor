@@ -4,7 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { message, Modal } from 'antd';
-import { assign, omit, isFunction, isObject, isString, isEmpty } from 'lodash';
+import { assign, omit, isFunction, isObject, isString, isEmpty } from 'lodash-es';
 import { clearStorage, getRandomKey, getStorage, removeStorage, setStorage, urlEncode } from '@/utils/utils';
 import router from 'umi/router';
 import { logout } from '@/apiConfig';

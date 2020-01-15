@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tree, Button, Modal, Radio, Alert } from 'antd';
-import { isEmpty, cloneDeep, isArray } from 'lodash';
+import { isEmpty, cloneDeep, isArray } from 'lodash-es';
 import { modelName, randomString, getKeyToElement } from '../config';
 import { connect } from 'dva';
 

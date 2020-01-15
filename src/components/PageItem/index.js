@@ -2,8 +2,8 @@ import { Button, Card, PageHeader, Spin } from 'antd';
 import React from 'react';
 import styles from './index.less';
 import { connect } from 'dva';
-import isFunction from 'lodash/isFunction';
-import isEmpty from 'lodash/isEmpty';
+import isFunction from 'lodash-es/isFunction';
+import isEmpty from 'lodash-es/isEmpty';
 import classNames from 'classnames';
 
 @connect(({ global: { siderWidth } }) => ({

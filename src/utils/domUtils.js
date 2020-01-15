@@ -1,4 +1,4 @@
-import { isEmpty, isString } from 'lodash';
+import { isEmpty, isString } from 'lodash-es';
 
 /**
  * 获取 dom 节点 $container 的 tagName = childName 的子节点

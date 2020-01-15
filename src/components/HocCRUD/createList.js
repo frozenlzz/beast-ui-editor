@@ -1,4 +1,4 @@
-import { isArray, isEmpty, isFunction, isObject, omitBy } from 'lodash';
+import { isArray, isEmpty, isFunction, isObject, omitBy } from 'lodash-es';
 import React from 'react';
 import { getRandomKey } from '@/utils/utils';
 import { abortFetch, newAbortCtrl } from '@/helpers/request';

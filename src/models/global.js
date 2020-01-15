@@ -1,4 +1,4 @@
-import { isArray, isEmpty, omit, orderBy } from 'lodash';
+import { isArray, isEmpty, omit, orderBy } from 'lodash-es';
 import { getRandomKey, getStorage } from '@/utils/utils';
 
 let locale = getStorage('umi_locale') || '';

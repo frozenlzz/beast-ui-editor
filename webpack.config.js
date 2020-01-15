@@ -7,6 +7,8 @@ module.exports = {
   resolve: {
     alias: {
       '@': require('path').resolve(__dirname, 'src'),
+      'jh-utils': require('path').resolve(__dirname, '../jh-utils'),
+      'jh-lib': require('path').resolve(__dirname, '../jh-lib'),
     },
   },
 };

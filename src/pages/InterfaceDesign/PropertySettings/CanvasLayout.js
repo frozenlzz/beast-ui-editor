@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Input, Radio } from 'antd';
 import ChangeNumber from '@/components/ChangeNumber';
-import { cloneDeep, omit } from 'lodash';
+import {connect} from 'dva';
+import { cloneDeep, omit } from 'lodash-es';
+import { modelName } from '@/pages/InterfaceDesign/config';
 import styles from './index.less';
 
 class FlexLayout extends Component {
@@ -239,6 +241,7 @@ class FlexLayout extends Component {
   }
 }
 
+@connect()
 class CanvasLayout extends Component {
   constructor(props) {
     super(props);
@@ -285,7 +288,7 @@ class CanvasLayout extends Component {
   // 修改组件属性start
   editAttribute({ data = {}, index }) {
     this.props.dispatch({
-      type: 'interfaceDesign/editAttribute',
+      type: `${modelName}/editAttribute`,
       payload: { data: data, index: index },
     });
   }
@@ -313,7 +316,7 @@ class CanvasLayout extends Component {
         </div>
         <div className={styles['line']}></div>
         {layoutType === 'b' && (
-          <FlexLayout {...this.props} editAttribute={obj => this.editAttribute(obj)} />
+          <FlexLayout currentIndex={currentIndex} initData={initData} editAttribute={obj => this.editAttribute(obj)} />
         )}
       </div>
     );

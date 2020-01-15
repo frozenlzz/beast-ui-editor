@@ -2,7 +2,7 @@ import services from './service';
 import { modelName, addChildrenData, deleteChildrenData, editChildrenData } from './config';
 import createCRUDModel from '@/helpers/createCRUDModel';
 import { findObjectList } from './service';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash-es';
 // 第三个参数为预留自定义操作
 export default createCRUDModel(modelName, services, {
   state: {
@@ -16,25 +16,84 @@ export default createCRUDModel(modelName, services, {
         'alignItems': 'flex-start',
         'flexDirection': 'row',
         'justifyContent': 'flex-start',
-        'background': '#fff'
+        'background': '#fff',
       },
       'children': [{
-        'name': '输入框',
-        'DomType': 'Jhinput',
-        'attribute': { 'placeholder': '输入框' },
+        'name': '按钮1',
+        'DomType': 'ButtonComp',
+        'attribute': {
+          'type': 'primary',
+          'text': '按钮1',
+        },
         'style': { 'width': '200px' },
         'position': { 'x': 33, 'y': 17 },
         'key': 'rVtjAMduM8CsSvqd',
       }, {
-        'name': '输入框',
-        'DomType': 'Jhinput',
-        'attribute': { 'placeholder': '输入框' },
+        'name': '按钮2',
+        'DomType': 'ButtonComp',
+        'attribute': {
+          'type': 'danger',
+          'text': '按钮2',
+        },
         'style': { 'width': '200px' },
         'position': { 'x': 333, 'y': 17 },
         'key': 'rVtjAMduM8CsSvqY',
       }],
       'position': { 'x': '299', 'y': '100' },
       'key': 'hZJ5fo1VggUhQs1R',
+    }, {
+      'name': '结束页面',
+      'DomType': 'Result',
+      'key': 'rVtjAMduM8CsSvqfe',
+      'position': { 'x': 118, 'y': 400 },
+      'attribute': {
+        'type': 'info',
+        'title': '提交成功',
+        'description': '提交结果页用于反馈一系列操作任务的处理结果，如果仅是简单操作，使用 Message 全局提示反馈即可。本文字区域可以展示简单的补充说明，如果有类似展示“单据”的需求，下面这个灰色区域可以呈现比较复杂的内容。',
+        'actions': {
+          $$_type: 'jsx',
+          $$_body :[
+            {
+              $$_type: "component",
+              $$_body: {
+                'name': '按钮1',
+                'DomType': 'ButtonComp',
+                'attribute': {
+                  'type': 'primary',
+                  'text': '确定',
+                },
+                'style': { 'width': '100px' },
+                'key': 'rVtjAMduM8Cs90mY',
+              }
+            },{
+              $$_type: "component",
+              $$_body: {
+                'name': '按钮2',
+                'DomType': 'ButtonComp',
+                'attribute': {
+                  'type': 'danger',
+                  'text': '取消',
+                },
+                'style': { 'width': '100px', },
+                'key': 'rVtjAMduM8Cs90mfY',
+              }
+            },{
+              $$_type: "component",
+              $$_body: {
+                'name': '按钮2',
+                'DomType': 'SwitchComp',
+                'attribute': {
+                },
+                'style': { 'width': 'auto' },
+                'key': 'rVtjAMduM8Cs90mdY',
+              }
+            }
+          ],
+        },
+      },
+      'style': {
+        'width': 'auto',
+      },
     }],
 
     currentIndex: -1, // 当前选中元素组件key值

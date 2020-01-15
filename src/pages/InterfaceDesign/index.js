@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Button } from 'antd';
 import { connect } from 'dva';
 import { modelName, DataToDom, randomString } from './config';
-import { isEmpty, omit } from 'lodash';
+import { isEmpty, omit } from 'lodash-es';
 
 import ComponentLibrary from './ComponentLibrary';
 import PropertySettings from './PropertySettings';

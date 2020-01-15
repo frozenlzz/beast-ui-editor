@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Input, Collapse, Button } from 'antd';
 import { connect } from 'dva';
 import ChangeNumber from '@/components/ChangeNumber';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash-es';
 import { getKeyToElement } from '../config';
 import BasicAttribute from './BasicAttribute';
 import CanvasLayout from './CanvasLayout';
@@ -38,19 +38,23 @@ class PropertySettings extends Component {
   }
 
   // 修改名称name
-  nameChange(e) {
+  nameChange(e, attrName = '') {
     e.persist();
     const { index, initData } = this.state;
     let newData = cloneDeep(initData);
-    newData.name = e.target.value || '';
-    this.setState(
-      {
-        initData: newData,
-      },
-      () => {
-        this.editAttribute({ data: newData, index: index });
-      }
-    );
+    if(attrName) {
+      newData[attrName] = e.target.value || '';
+      this.setState(
+        {
+          initData: newData,
+        },
+        () => {
+          this.editAttribute({ data: newData, index: index });
+        }
+      );
+    } else {
+      console.log('没有属性名');
+    }
   }
 
   // 修改组件属性start
@@ -64,7 +68,7 @@ class PropertySettings extends Component {
 
   // 修改组件属性end
   render() {
-    const { initData } = this.state;
+    const { initData, index } = this.state;
     return (
       <div
         style={{
@@ -88,7 +92,7 @@ class PropertySettings extends Component {
               />
             </Panel>
             <Panel header="布局" key="2" style={{ display: initData.DomType !== 'div' && 'none' }}>
-              <CanvasLayout initData={initData || {}} {...this.props} />
+              <CanvasLayout initData={initData || {}} currentIndex={index}/>
             </Panel>
             <Panel header="高级" key="3">
               <p>高级</p>

@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { modelName } from './config';
 import { DataToDom } from '../InterfaceDesign/config';
 import { connect } from 'dva';
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash-es/isEmpty';
 import { Tabs } from 'antd';
 
 const { TabPane } = Tabs;
-
+const marginList = {
+  marginTop: '0',
+  marginRight: '0',
+  marginBottom: '0',
+  marginLeft: '0',
+};
 @connect(interfaceDesign => interfaceDesign)
 class ReleaseVersion extends Component {
   constructor(props) {
@@ -84,7 +89,7 @@ class ReleaseVersion extends Component {
               }
             </div> ||
             v.DomType === 'JhTabs' && <div>{this.JhTabsDOM(v)}</div> ||
-            v.comp,
+            <div>{v.comp}</div>,
             {
               key: v.key,
               style: {
@@ -96,6 +101,7 @@ class ReleaseVersion extends Component {
                   overflow: v.DomType === 'div' && 'auto',
                   border: v.DomType === 'div' && '1px solid #ccc',
                 },
+                ...marginList,
               },
             },
           );
@@ -144,18 +150,20 @@ class ReleaseVersion extends Component {
           return React.cloneElement(
             item.DomType === 'div' && <div>{this.childrenDom(item)}</div> ||
             item.DomType === 'JhTabs' && <div>{this.JhTabsDOM(item)}</div> ||
-            item.comp,
+            <div>{item.comp}</div>,
             {
               key: i,
               style: {
                 ...item.style,
                 ...{
+                  paddingTop : '0px',
                   position: 'absolute',
                   top: `${item.position.y || 0}px`,
                   left: `${item.position.x || 0}px`,
                   overflow: item.DomType === 'div' && 'auto',
                   border: item.DomType === 'div' &&'1px solid #ccc',
                 },
+                ...marginList,
               },
             },
           );

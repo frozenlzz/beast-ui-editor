@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import React from 'react';
 import { abortFetch, newAbortCtrl } from '@/helpers/request';
 

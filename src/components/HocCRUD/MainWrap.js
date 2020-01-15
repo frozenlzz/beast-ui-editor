@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Input, Button, Card, Table } from 'antd';
 import ExportComp from '@/components/ExportComp';
 import { connect } from 'dva';
-import isFunction from 'lodash/isFunction';
+import isFunction from 'lodash-es/isFunction';
 import SaveBtn from '@/componentsTpl/ButtonComp/SaveBtn';
 import { formatLocaleCols, myFormatMessage } from '@/utils/localeUtils';
 import PageHeaderComp from '@/componentsTpl/PageHeaderComp';

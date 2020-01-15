@@ -1,4 +1,4 @@
-import { isArray, isEmpty, isObject, map } from 'lodash';
+import { isArray, isEmpty, isObject, map } from 'lodash-es';
 
 /**
  * 递归为对象数组里的对象，添加 key 字段以及其他额外字段

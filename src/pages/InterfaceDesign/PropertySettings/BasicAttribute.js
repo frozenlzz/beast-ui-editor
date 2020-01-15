@@ -87,7 +87,7 @@ class BasicAttribute extends Component {
         <div>
           <div style={{ display: 'inline-block', width: '30%' }}>name</div>
           <div style={{ display: 'inline-block', width: '70%' }}>
-            <Input value={initData.name} onChange={this.props.nameChange} />
+            <Input value={initData.name} onChange={e => this.props.nameChange(e, 'name')} />
           </div>
         </div>
         <div className={styles['line']}></div>

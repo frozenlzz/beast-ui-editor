@@ -1,4 +1,4 @@
-import { findIndex, isString } from 'lodash';
+import { findIndex, isString } from 'lodash-es';
 
 const imgTypeArr = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
 

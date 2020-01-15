@@ -1,5 +1,5 @@
 import router from 'umi/router';
-import { clone, findIndex, isEmpty, isObject, isString, map, omit, pick, isArray } from 'lodash';
+import { clone, findIndex, isEmpty, isObject, isString, map, omit, pick, isArray } from 'lodash-es';
 import { message } from 'antd';
 import { datetime2Date, getRandomKey, isObjectValEqual, setStorage, sleepFunc } from '@/utils/utils';
 import { failHandler } from '@/helpers/request';

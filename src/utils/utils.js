@@ -1,15 +1,15 @@
 import moment from 'dayjs';
 import React from 'react';
-import omit from 'lodash/omit';
-import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
-import isObject from 'lodash/isObject';
-import forEach from 'lodash/forEach';
-import isArray from 'lodash/isArray';
-// import keys from 'lodash/keys';
-import functionsIn from 'lodash/functionsIn';
+import omit from 'lodash-es/omit';
+import isEmpty from 'lodash-es/isEmpty';
+import isEqual from 'lodash-es/isEqual';
+import isObject from 'lodash-es/isObject';
+import forEach from 'lodash-es/forEach';
+import isArray from 'lodash-es/isArray';
+// import keys from 'lodash-es/keys';
+import functionsIn from 'lodash-es/functionsIn';
 import { parse, stringify } from 'qs';
-import { isNumber, pick, trim } from 'lodash';
+import { isNumber, pick, trim } from 'lodash-es';
 import router from 'umi/router';
 
 export function urlEncode(param) {

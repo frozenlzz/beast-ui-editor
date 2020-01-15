@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { isNumber, isString } from 'lodash';
+import { isNumber, isString } from 'lodash-es';
 
 export function fuckJsFloat(num) {
   return isNumber(num) ? Math.round(num * 100) / 100 : num;
