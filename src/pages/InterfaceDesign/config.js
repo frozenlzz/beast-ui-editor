@@ -2,7 +2,7 @@ import { appConfig } from '@/appConfig';
 import React from 'react';
 import { isEmpty, cloneDeep, isArray, forEach } from 'lodash-es';
 import * as JH_DOM from 'jh-lib';
-import { JhTabs } from '@/static/config';
+import { attributesToDOM } from '@/helpers/loader';
 
 const config = appConfig.INTERFACE_DESIGN;
 
@@ -144,21 +144,3 @@ export function editChildrenData(initData, key, data) {
   });
 }
 
-// 将属性实体转换为对应jsx
-export function attributesToDOM (type, body) {
-  if(type === 'jsx') {
-    if(!isEmpty(body)){
-       return body.map((item, index) => {
-         if(item['$$_type'] === 'component' && !isEmpty(item['$$_body'])){
-           const newBody = cloneDeep(item['$$_body']);
-           if(JH_DOM[newBody['DomType']]){
-             const Data = JH_DOM[newBody['DomType']];
-             const newAttribute = newBody['attribute'] || {};
-             const newStyle = newBody['style'] || {};
-             return <Data {...newAttribute} style={{ ...newStyle }} key={index}></Data>;
-           }
-         }
-      })
-    }
-  }
-}

@@ -24,6 +24,7 @@ export default createCRUDModel(modelName, services, {
         'attribute': {
           'type': 'primary',
           'text': '按钮1',
+          'size': 'default'
         },
         'style': { 'width': '200px' },
         'position': { 'x': 33, 'y': 17 },
@@ -34,6 +35,7 @@ export default createCRUDModel(modelName, services, {
         'attribute': {
           'type': 'danger',
           'text': '按钮2',
+          'ghost': true
         },
         'style': { 'width': '200px' },
         'position': { 'x': 333, 'y': 17 },
@@ -77,17 +79,7 @@ export default createCRUDModel(modelName, services, {
                 'style': { 'width': '100px', },
                 'key': 'rVtjAMduM8Cs90mfY',
               }
-            },{
-              $$_type: "component",
-              $$_body: {
-                'name': '按钮2',
-                'DomType': 'SwitchComp',
-                'attribute': {
-                },
-                'style': { 'width': 'auto' },
-                'key': 'rVtjAMduM8Cs90mdY',
-              }
-            }
+            },
           ],
         },
       },

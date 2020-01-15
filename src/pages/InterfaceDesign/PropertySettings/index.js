@@ -6,6 +6,7 @@ import { cloneDeep, isEmpty } from 'lodash-es';
 import { getKeyToElement } from '../config';
 import BasicAttribute from './BasicAttribute';
 import CanvasLayout from './CanvasLayout';
+import CustomAttribute from './CustomAttribute';
 
 const { Panel } = Collapse;
 
@@ -83,7 +84,7 @@ class PropertySettings extends Component {
         }}
       >
         {!isEmpty(initData) && (
-          <Collapse defaultActiveKey={['1','2']}>
+          <Collapse defaultActiveKey={['1','2','3']}>
             <Panel header="基础属性" key="1">
               <BasicAttribute
                 initData={initData || {}}
@@ -91,10 +92,13 @@ class PropertySettings extends Component {
                 {...this.props}
               />
             </Panel>
-            <Panel header="布局" key="2" style={{ display: initData.DomType !== 'div' && 'none' }}>
+            <Panel header="自定义属性" key="2" style={{ display: initData.DomType === 'div' && 'none' }}>
+              <CustomAttribute initData={initData || {}} currentIndex={index}/>
+            </Panel>
+            <Panel header="布局" key="3" style={{ display: initData.DomType !== 'div' && 'none' }}>
               <CanvasLayout initData={initData || {}} currentIndex={index}/>
             </Panel>
-            <Panel header="高级" key="3">
+            <Panel header="高级" key="4">
               <p>高级</p>
             </Panel>
           </Collapse>
