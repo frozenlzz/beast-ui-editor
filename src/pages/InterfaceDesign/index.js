@@ -188,6 +188,10 @@ export default class InterfaceDesign extends Component {
 
   canvasClick() {
     this.currentKeyChange(-1);
+    this.props.dispatch({
+      type: `${modelName}/PropertiesPanelVisibleChange`,
+      payload: { PropertiesPanelVisible: false },
+    });
   }
 
   elementClick(e, item) {
@@ -200,11 +204,23 @@ export default class InterfaceDesign extends Component {
       },
       () => {
         this.currentKeyChange(item.key);
+        this.props.dispatch({
+          type: `${modelName}/PropertiesPanelVisibleChange`,
+          payload: { PropertiesPanelVisible: false },
+        });
         console.log('选中对象索引》》》', item.key);
       },
     );
   }
-
+  elementDblClick(e, item) {
+    e.persist();
+    e.stopPropagation();
+    console.log('双击成功');
+    this.props.dispatch({
+      type: `${modelName}/PropertiesPanelVisibleChange`,
+      payload: { PropertiesPanelVisible: true },
+    });
+  }
   render() {
     const newConfig = !isEmpty(this.state.config) ? DataToDom(this.state.config) : [];
     const { currentData, currentIndex } = this.state;
@@ -231,6 +247,7 @@ export default class InterfaceDesign extends Component {
             allowDrop={this.allowDrop.bind(this)}
             canvasClick={this.canvasClick.bind(this)}
             elementClick={this.elementClick.bind(this)}
+            elementDblClick={this.elementDblClick.bind(this)}
             MouseUp={this.MouseUp.bind(this)}
             showDetail={this.showDetail.bind(this)}
             currentIndex={currentIndex}

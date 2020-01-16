@@ -79,6 +79,16 @@ export default createCRUDModel(modelName, services, {
                 'style': { 'width': '100px', },
                 'key': 'rVtjAMduM8Cs90mfY',
               }
+            },{
+              $$_type: "component",
+              $$_body: {
+                'name': '开关',
+                'DomType': 'SwitchComp',
+                'attribute': {
+                },
+                'style': { 'width': '50px', },
+                'key': 'rVtjAMduM8Cs90mfY',
+              }
             },
           ],
         },
@@ -92,6 +102,7 @@ export default createCRUDModel(modelName, services, {
     objectVisible: false, // 项目选择左侧栏栏目是否弹出(true)
     revokeList: [], // 存储操作数据，用于撤销时使用
     contraryRevokeList: [], // 撤销后，将上一个数据存储，用于反撤销时使用
+    PropertiesPanelVisible: false, // 自定义属性面板弹出
   },
   effects: {
     // 查询套餐信息
@@ -134,7 +145,7 @@ export default createCRUDModel(modelName, services, {
 
     /**
      * 修改组件
-     * @param {Object} data 新增的组件对象
+     * @param {Object} data 新修改的组件对象
      * @param state
      * */
     editAttribute(state, { payload }) {
@@ -248,6 +259,11 @@ export default createCRUDModel(modelName, services, {
         };
       }
     },
+
+    PropertiesPanelVisibleChange(state, {payload}) {
+      const { PropertiesPanelVisible } = payload;
+      return { ...state, ...{ PropertiesPanelVisible: PropertiesPanelVisible } };
+    }
   },
 });
 

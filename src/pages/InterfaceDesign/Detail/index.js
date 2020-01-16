@@ -228,7 +228,11 @@ class HostDetail extends React.Component {
       },
     );
   }
-
+  elementDblClick(e, item) {
+    e.persist();
+    e.stopPropagation();
+    console.log('双击')
+  }
   /**
    *
    * 新建保存
@@ -345,6 +349,7 @@ class HostDetail extends React.Component {
                   allowDrop={this.allowDrop.bind(this)}
                   canvasClick={this.canvasClick.bind(this)}
                   elementClick={this.elementClick.bind(this)}
+                  elementDblClick={this.elementDblClick.bind(this)}
                   MouseUp={this.MouseUp.bind(this)}
                   showDetail={this.showDetail.bind(this)}
                   currentIndex={currentIndex}

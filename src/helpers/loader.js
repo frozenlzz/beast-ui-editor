@@ -14,6 +14,7 @@ export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute =
     }
   }
   newStyles.width = '100%';
+  newStyles['pointerEvents'] = 'none';
   if (JH_DOM[DomType]) {
     let Data = JH_DOM[DomType];
     bom = <Data {...newAttribute} style={{ ...newStyles }}></Data>;
