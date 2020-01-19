@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { createDetail } from '@/components/HocCRUD';
 import { modelName, randomString, getKeyToElement } from '../config';
-import { DataToDom } from '@/helpers/loader';
+import { DataToDom } from '@/helpers/renderPage';
 import PageItem from '@/components/PageItem';
 import { isEmpty, omit, cloneDeep } from 'lodash-es';
 import ComponentLibrary from '../ComponentLibrary';
@@ -313,7 +313,7 @@ class HostDetail extends React.Component {
     const bodyWidth = document.body.offsetWidth;
     const containerStyle = {
       ...style,
-      left: '0',
+      left: '0px',
       top: '0px',
       // width: (!isEmpty(config) && config.style.width !== '100%' ? config.style.width : '1920px') || 1,
       width: (!isEmpty(config) && this.widthFn(config.style.width, bodyWidth)) || 1,

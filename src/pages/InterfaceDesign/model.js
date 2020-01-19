@@ -24,7 +24,6 @@ export default createCRUDModel(modelName, services, {
         'attribute': {
           'type': 'primary',
           'text': '按钮1',
-          'size': 'default'
         },
         'style': { 'width': '200px' },
         'position': { 'x': 33, 'y': 17 },
@@ -35,7 +34,6 @@ export default createCRUDModel(modelName, services, {
         'attribute': {
           'type': 'danger',
           'text': '按钮2',
-          'ghost': true
         },
         'style': { 'width': '200px' },
         'position': { 'x': 333, 'y': 17 },
@@ -50,7 +48,13 @@ export default createCRUDModel(modelName, services, {
       'position': { 'x': 118, 'y': 400 },
       'attribute': {
         'type': 'info',
-        'title': '提交成功',
+        'title': '操作成功',
+        // {
+        //   $$_type: 'binding',
+        //   $$_body: {
+        //     code:'你好，{$global.userName}'
+        //   },
+        // },
         'description': '提交结果页用于反馈一系列操作任务的处理结果，如果仅是简单操作，使用 Message 全局提示反馈即可。本文字区域可以展示简单的补充说明，如果有类似展示“单据”的需求，下面这个灰色区域可以呈现比较复杂的内容。',
         'actions': {
           $$_type: 'jsx',
@@ -79,17 +83,7 @@ export default createCRUDModel(modelName, services, {
                 'style': { 'width': '100px', },
                 'key': 'rVtjAMduM8Cs90mfY',
               }
-            },{
-              $$_type: "component",
-              $$_body: {
-                'name': '开关',
-                'DomType': 'SwitchComp',
-                'attribute': {
-                },
-                'style': { 'width': '50px', },
-                'key': 'rVtjAMduM8Cs90mfY',
-              }
-            },
+            }
           ],
         },
       },

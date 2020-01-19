@@ -1,6 +1,7 @@
+import React from 'react';
 import { cloneDeep, isArray, isEmpty } from 'lodash-es';
 import * as JH_DOM from 'jh-lib';
-import React from 'react';
+import * as Loader from './loader';
 
 // 输出对应的DomType功能模块
 export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute = {} }) => {
@@ -9,8 +10,9 @@ export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute =
   let bom = null;
   if (!isEmpty(newAttribute)) {
     for (let key in newAttribute) {
-      if (newAttribute.hasOwnProperty(key) && newAttribute[key]['$$_type'])
-        newAttribute[key]['$$_type'] === 'jsx' && (newAttribute[key] = attributesToDOM(newAttribute[key]['$$_type'], newAttribute[key]['$$_body']));
+      if (newAttribute.hasOwnProperty(key) && newAttribute[key].hasOwnProperty('$$_type')) {
+        newAttribute[key] = Loader[newAttribute[key]['$$_type']].translate(newAttribute[key]);
+      }
     }
   }
   newStyles.width = '100%';
@@ -39,20 +41,20 @@ export const DataToDom = data => {
 };
 
 // 将属性实体转换为对应jsx
-export function attributesToDOM (type, body) {
-  if(type === 'jsx') {
-    if(!isEmpty(body)){
-      return body.map((item, index) => {
-        if(item['$$_type'] === 'component' && !isEmpty(item['$$_body'])){
-          const newBody = cloneDeep(item['$$_body']);
-          if(JH_DOM[newBody['DomType']]){
-            const Data = JH_DOM[newBody['DomType']];
-            const newAttribute = newBody['attribute'] || {};
-            const newStyle = newBody['style'] || {};
-            return <Data {...newAttribute} style={{ ...newStyle }} key={index}></Data>;
-          }
-        }
-      })
-    }
-  }
-}
+// export function attributesToDOM (type, body) {
+//   if(type === 'jsx') {
+//     if(!isEmpty(body)){
+//       return body.map((item, index) => {
+//         if(item['$$_type'] === 'component' && !isEmpty(item['$$_body'])){
+//           const newBody = cloneDeep(item['$$_body']);
+//           if(JH_DOM[newBody['DomType']]){
+//             const Data = JH_DOM[newBody['DomType']];
+//             const newAttribute = newBody['attribute'] || {};
+//             const newStyle = newBody['style'] || {};
+//             return <Data {...newAttribute} style={{ ...newStyle }} key={index}></Data>;
+//           }
+//         }
+//       })
+//     }
+//   }
+// }

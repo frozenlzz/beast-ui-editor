@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { modelName } from './config';
-import { DataToDom } from '@/helpers/loader';
+import { DataToDom } from '@/helpers/renderPage';
 import { connect } from 'dva';
 import isEmpty from 'lodash-es/isEmpty';
 import { Tabs } from 'antd';

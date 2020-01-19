@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Collapse, Icon, Popover, Input } from 'antd';
 import { getKeyToElement, modelName, randomString } from '../config';
-import { BOM_TYPE } from '@/helpers/loader';
+import { BOM_TYPE } from '@/helpers/renderPage';
 import { isEmpty } from 'lodash-es';
 import router from 'umi/router';
 import Link from 'umi/link';
