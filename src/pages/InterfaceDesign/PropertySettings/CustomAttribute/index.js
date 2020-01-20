@@ -96,23 +96,34 @@ class TypeSwitchingMenu extends Component {
   }
 }
 
-@connect()
-class CustomAttribute extends Component {
+@connect(({ interfaceDesign: { attributeComponentKeyList } }) => ({ attributeComponentKeyList }))
+export class CustomAttributeComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
-
-  customAttributeChange(data) {
-    const { currentIndex } = this.props;
+  // 当前选中的组件对应key值
+  currentKeyChange(key = -1) {
     this.props.dispatch({
-      type: `${modelName}/editAttribute`,
-      payload: { data: data, index: currentIndex },
+      type: `${modelName}/keyChange`,
+      payload: { key: key },
     });
   }
-
+  attributeComponentKeyListChange(e){
+    this.props.dispatch({
+      type: `${modelName}/attributeComponentKeyListChange`,
+      payload: { list: e },
+    });
+  }
+  arrowLeft() {
+    let attributeComponentKeyList = cloneDeep(this.props.attributeComponentKeyList);
+    let oldKey = attributeComponentKeyList.pop();
+    console.log('oldKey',oldKey);
+    this.attributeComponentKeyListChange(attributeComponentKeyList);
+    this.currentKeyChange(oldKey);
+  }
   render() {
-    const { initData, currentIndex } = this.props;
+    const { initData, currentIndex, attributeComponentKeyList } = this.props;
     /**
      * @param {Array} newConfig 当前组件的basic属性表
      * */
@@ -129,7 +140,13 @@ class CustomAttribute extends Component {
     }
     return (
       <div>
-        <h3 style={{ textAlign: 'center', fontWeight: 'bold' }}>自定义属性</h3>
+        <h3 style={{ textAlign: 'center', fontWeight: 'bold', padding: '0 10px' }}>
+          {
+            !isEmpty(attributeComponentKeyList) && (
+              <a style={{ float: 'left', color: '#000' }} title={'返回上层组件'} onClick={this.arrowLeft.bind(this)}><Icon type="arrow-left"/></a>)
+          }
+          自定义属性
+        </h3>
         {
           !isEmpty(newConfig) && newConfig.map((item, index) => {
             const defaultValue = initData.attribute[item.name] || item.body['defaultValue'];
@@ -143,13 +160,13 @@ class CustomAttribute extends Component {
                                          attribute={{ key: item.name, value: item.body['defaultValue'] }}
                                          currentIndex={currentIndex}
                                          initData={initData}
-                                         customAttributeChange={(e) => this.customAttributeChange(e)}>
+                                         customAttributeChange={(e) => this.props.customAttributeChange(e)}>
                         <span style={{ fontSize: '16px' }}>{item.body['name']}: {item.name}</span>
                       </AttributeCheckbox>
                     ) || (<span style={{ fontSize: '16px' }}>{item.body['name']}: {item.name}</span>)
                   }
                   <div style={{ float: 'right' }}>
-                    <TypeSwitchingMenu ></TypeSwitchingMenu>
+                    <TypeSwitchingMenu></TypeSwitchingMenu>
                   </div>
                 </div>
                 {
@@ -161,27 +178,29 @@ class CustomAttribute extends Component {
                                            values={item.body['values']}
                                            keys={item.name}
                                            initData={initData}
-                                           customAttributeChange={(e) => this.customAttributeChange(e)}
+                                           customAttributeChange={(e) => this.props.customAttributeChange(e)}
                                            currentIndex={currentIndex}></AttributeSelect>
                         ) ||
                         item.body['editType'] === 'CHECKBOX' && (
                           <AttributeSwitch defaultValue={defaultValue}
                                            keys={item.name}
                                            initData={initData}
-                                           customAttributeChange={(e) => this.customAttributeChange(e)}
+                                           customAttributeChange={(e) => this.props.customAttributeChange(e)}
                                            currentIndex={currentIndex}></AttributeSwitch>
                         ) ||
                         item.body['editType'] === 'JSX' && (
                           <AttributeJSX defaultValue={defaultValue}
                                         keys={item.name}
                                         initData={initData}
-                                        customAttributeChange={(e) => this.customAttributeChange(e)}
+                                        customAttributeChange={(e) => this.props.customAttributeChange(e)}
+                                        attributeComponentKeyListChange={(e) => this.attributeComponentKeyListChange(e)}
+                                        currentKeyChange={(e) => this.currentKeyChange(e)}
                                         currentIndex={currentIndex}></AttributeJSX>
                         ) ||
                         <AttributeInput defaultValue={defaultValue}
                                         keys={item.name}
                                         initData={initData}
-                                        customAttributeChange={(e) => this.customAttributeChange(e)}
+                                        customAttributeChange={(e) => this.props.customAttributeChange(e)}
                                         currentIndex={currentIndex}></AttributeInput>
                       }
                     </div>
@@ -191,6 +210,33 @@ class CustomAttribute extends Component {
             );
           })
         }
+      </div>
+    );
+  }
+}
+
+@connect()
+class CustomAttribute extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  customAttributeChange(data) {
+    const { currentIndex } = this.props;
+    const newData = cloneDeep(data);
+    this.props.dispatch({
+      type: `${modelName}/editAttribute`,
+      payload: { data: newData, index: currentIndex },
+    });
+  }
+
+  render() {
+    const { initData, currentIndex } = this.props;
+    return (
+      <div>
+        <CustomAttributeComponent initData={initData} currentIndex={currentIndex}
+                                  customAttributeChange={e => this.customAttributeChange(e)}></CustomAttributeComponent>
       </div>
     );
   }

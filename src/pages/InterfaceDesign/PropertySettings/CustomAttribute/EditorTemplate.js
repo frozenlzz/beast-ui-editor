@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { cloneDeep, isEmpty, isFunction } from 'lodash-es';
-import { Button, Divider, Icon, Input, Select, Switch, Popconfirm } from 'antd';
+import { Button, Divider, Icon, Input, Select, Switch, Popconfirm, Drawer } from 'antd';
 import { BOM_TYPE } from '@/helpers/renderPage';
+import { connect } from 'dva';
+import { modelName } from '@/pages/InterfaceDesign/config';
 
 const { Option } = Select;
 
@@ -154,18 +156,39 @@ export class AttributeSwitch extends Component {
  * editType = 'JSX'
  * 属性jsx模式
  * */
+@connect(({ interfaceDesign: { attributeComponentKeyList } }) => ({ attributeComponentKeyList }))
 export class AttributeJSX extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      attributeKey: '',
+    };
   }
 
-  confirm(e) {
+  confirm(key) {
+    this.props.dispatch({
+      type: `${modelName}/delete`,
+      payload: { index: key },
+    });
+    this.setState({
+      attributeKey: '',
+    });
   }
+
+  showDrawer = (e, key) => {
+    let attributeComponentKeyList = cloneDeep(this.props.attributeComponentKeyList);
+    this.setState({
+      attributeKey: key,
+    },() => {
+      attributeComponentKeyList.push(this.props.currentIndex);
+      this.props.attributeComponentKeyListChange(attributeComponentKeyList);
+      this.props.currentKeyChange(key);
+    });
+  };
+
 
   render() {
     const { defaultValue } = this.props;
-    console.log('defaultValue', defaultValue);
     return (
       <>
         {defaultValue['$$_type'] === 'jsx' && !isEmpty(defaultValue['$$_body']) &&
@@ -183,10 +206,11 @@ export class AttributeJSX extends Component {
                 }
               </div>
               <div style={{ float: 'right' }}>
-                <a>修改</a><Divider type="vertical"/>
+                <a onClick={e => this.showDrawer(item, item.$$_body.key)}>修改</a>
+                <Divider type="vertical"/>
                 <Popconfirm
                   title="是否删除当前组件?"
-                  onConfirm={this.confirm.bind(this)}
+                  onConfirm={e => this.confirm(item.$$_body.key)}
                   okText="Yes"
                   cancelText="No"
                 >
@@ -203,3 +227,5 @@ export class AttributeJSX extends Component {
     );
   }
 }
+
+

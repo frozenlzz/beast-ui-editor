@@ -3,8 +3,12 @@ import { cloneDeep, isArray, isEmpty } from 'lodash-es';
 import * as JH_DOM from 'jh-lib';
 import * as Loader from './loader';
 
-// 输出对应的DomType功能模块
-export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute = {} }) => {
+/**
+ * 输出对应的DomType功能模块
+ * @param {Object} {}
+ * @param {boolean} pointerEvents 是否禁用当前元素的所有操作
+ * */
+export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute = {} }, pointerEvents = true) => {
   let newStyles = cloneDeep(style);
   let newAttribute = cloneDeep(attribute);
   let bom = null;
@@ -16,7 +20,7 @@ export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute =
     }
   }
   newStyles.width = '100%';
-  newStyles['pointerEvents'] = 'none';
+  pointerEvents && (newStyles['pointerEvents'] = 'none');
   if (JH_DOM[DomType]) {
     let Data = JH_DOM[DomType];
     bom = <Data {...newAttribute} style={{ ...newStyles }}></Data>;
@@ -29,12 +33,12 @@ export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute =
 };
 
 // 将数据转换成可渲染页面数据格式
-export const DataToDom = data => {
+export const DataToDom = (data, pointerEvents = true) => {
   if (!isEmpty(data) && isArray(data)) {
     let newData = cloneDeep(data);
     return newData.map((item, index) => {
       const { DomType = '', name = 'demo1', style = {}, attribute = {} } = item;
-      item.comp = BOM_TYPE({ DomType, name, style, attribute });
+      item.comp = BOM_TYPE({ DomType, name, style, attribute }, pointerEvents);
       return item;
     });
   }

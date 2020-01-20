@@ -72,7 +72,7 @@ class ReleaseVersion extends Component {
     return (
       <>
         {!isEmpty(item.children) &&
-        DataToDom(item.children).map(v => {
+        DataToDom(item.children,false).map(v => {
           return React.cloneElement(
             v.DomType === 'div' && <div>
               {
@@ -142,7 +142,7 @@ class ReleaseVersion extends Component {
   }
 
   render() {
-    const initData = !isEmpty(this.state.initData) ? DataToDom(this.state.initData) : [];
+    const initData = !isEmpty(this.state.initData) ? DataToDom(this.state.initData, false) : [];
     return (
       <div style={{ position: 'relative' }}>
         {!isEmpty(initData) &&

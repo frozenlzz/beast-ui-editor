@@ -72,7 +72,7 @@ class DragFixed extends Component {
           >
             <span style={{ color: '#fff', touchAction: 'none' }}><Icon type="menu"/></span>
           </div>
-          <div style={{ padding: '10px 0', minHeight: '500px', maxHeight: '600px', overflowY: 'auto' }}
+          <div style={{ padding: '10px 0', minHeight: '500px', maxHeight: '600px', overflowY: 'auto',}}
                onMouseDown={e => e.stopPropagation()}>
             <CustomAttribute initData={initData || {}} currentIndex={currentIndex}/>
           </div>

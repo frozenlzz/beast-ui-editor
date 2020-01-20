@@ -11,8 +11,8 @@ const { TextArea } = Input;
 /**
  * 基础属性功能
  * */
-@connect()
-class CustomizeStyleText extends Component {
+
+export class CustomizeStyleText extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -69,10 +69,7 @@ class CustomizeStyleText extends Component {
       }
     }
     initData.style = { ...newObjectStyle };
-    this.props.dispatch({
-      type: `${modelName}/editAttribute`,
-      payload: { data: initData, index: this.props.currentIndex },
-    });
+    this.props.customizeStyleChange(initData);
   }
 
   render() {
@@ -92,6 +89,7 @@ class CustomizeStyleText extends Component {
   }
 }
 
+@connect()
 class BasicAttribute extends Component {
   constructor(props) {
     super(props);
@@ -116,7 +114,13 @@ class BasicAttribute extends Component {
       });
     }
   }
-
+  customizeStyleChange(initData, key) {
+    const {currentIndex} = this.props;
+    this.props.dispatch({
+      type: `${modelName}/editAttribute`,
+      payload: { data: initData, index: currentIndex },
+    });
+  }
   componentDidMount() {
     const { initData } = this.props;
     const regPx = new RegExp('px', 'ig');
@@ -355,8 +359,9 @@ class BasicAttribute extends Component {
           </div>
           <div className={styles['line']}></div>
           <div>
-            <CustomizeStyleText style={initData.style} currentIndex={currentIndex}
-                                initData={initData}></CustomizeStyleText>
+            <CustomizeStyleText style={initData.style}
+                                initData={initData}
+                                customizeStyleChange={(e) => this.customizeStyleChange(e)}></CustomizeStyleText>
           </div>
           <div className={styles['line']}></div>
           {initData.DomType === 'div' && detailId !== currentIndex && (
