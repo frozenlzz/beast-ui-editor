@@ -3,7 +3,8 @@
   "scripts": {
     "start": "umi dev",
     "build": "umi build",
-    "test": "umi test"
+    "test": "umi test",
+    "analyze": "set ANALYZE=true && yarn build"
   },
   "dependencies": {
     "antd": "^3.26.4",
@@ -15,7 +16,9 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-draggable": "^4.2.0",
-    "umi-request": "^1.0.4"
+    "umi-request": "^1.0.4",
+    "qs": "latest",
+    "dayjs": "latest"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
