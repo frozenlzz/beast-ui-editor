@@ -1,5 +1,5 @@
 import services from './service';
-import { modelName, addChildrenData, deleteChildrenData, editChildrenData } from './config';
+import { modelName, addChildrenData, deleteChildrenData, editChildrenData, RevokeListChange } from './config';
 import createCRUDModel from '@/helpers/createCRUDModel';
 import { findObjectList } from './service';
 import { cloneDeep, isEmpty } from 'lodash-es';
@@ -24,7 +24,6 @@ export default createCRUDModel(modelName, services, {
         'attribute': {
           'type': 'primary',
           'text': '按钮1',
-          'size': 'default'
         },
         'style': { 'width': '200px' },
         'position': { 'x': 33, 'y': 17 },
@@ -35,7 +34,6 @@ export default createCRUDModel(modelName, services, {
         'attribute': {
           'type': 'danger',
           'text': '按钮2',
-          'ghost': true
         },
         'style': { 'width': '200px' },
         'position': { 'x': 333, 'y': 17 },
@@ -50,13 +48,19 @@ export default createCRUDModel(modelName, services, {
       'position': { 'x': 118, 'y': 400 },
       'attribute': {
         'type': 'info',
-        'title': '提交成功',
+        'title': '操作成功',
+        // {
+        //   $$_type: 'binding',
+        //   $$_body: {
+        //     code:'你好，{$global.userName}'
+        //   },
+        // },
         'description': '提交结果页用于反馈一系列操作任务的处理结果，如果仅是简单操作，使用 Message 全局提示反馈即可。本文字区域可以展示简单的补充说明，如果有类似展示“单据”的需求，下面这个灰色区域可以呈现比较复杂的内容。',
         'actions': {
           $$_type: 'jsx',
-          $$_body :[
+          $$_body: [
             {
-              $$_type: "component",
+              $$_type: 'component',
               $$_body: {
                 'name': '按钮1',
                 'DomType': 'ButtonComp',
@@ -66,9 +70,9 @@ export default createCRUDModel(modelName, services, {
                 },
                 'style': { 'width': '100px' },
                 'key': 'rVtjAMduM8Cs90mY',
-              }
-            },{
-              $$_type: "component",
+              },
+            }, {
+              $$_type: 'component',
               $$_body: {
                 'name': '按钮2',
                 'DomType': 'ButtonComp',
@@ -76,9 +80,9 @@ export default createCRUDModel(modelName, services, {
                   'type': 'danger',
                   'text': '取消',
                 },
-                'style': { 'width': '100px', },
+                'style': { 'width': '150px' },
                 'key': 'rVtjAMduM8Cs90mfY',
-              }
+              },
             },
           ],
         },
@@ -92,6 +96,8 @@ export default createCRUDModel(modelName, services, {
     objectVisible: false, // 项目选择左侧栏栏目是否弹出(true)
     revokeList: [], // 存储操作数据，用于撤销时使用
     contraryRevokeList: [], // 撤销后，将上一个数据存储，用于反撤销时使用
+    PropertiesPanelVisible: false, // 自定义属性面板弹出
+    attributeComponentKeyList: [], // 用于撤回到上层组件key值，组件有多层jsx设置的时候
   },
   effects: {
     // 查询套餐信息
@@ -134,7 +140,7 @@ export default createCRUDModel(modelName, services, {
 
     /**
      * 修改组件
-     * @param {Object} data 新增的组件对象
+     * @param {Object} data 新修改的组件对象
      * @param state
      * */
     editAttribute(state, { payload }) {
@@ -248,15 +254,26 @@ export default createCRUDModel(modelName, services, {
         };
       }
     },
+
+    /**
+     * 弹出自定义属性设置框
+     * */
+    PropertiesPanelVisibleChange(state, { payload }) {
+      const { PropertiesPanelVisible } = payload;
+      if (PropertiesPanelVisible === false) {
+        const list = [];
+        return { ...state, ...{ PropertiesPanelVisible: PropertiesPanelVisible, attributeComponentKeyList: list } };
+      }
+      return { ...state, ...{ PropertiesPanelVisible: PropertiesPanelVisible } };
+    },
+
+    /**
+     * 用于撤回到上层组件key值
+     */
+    attributeComponentKeyListChange(state, { payload }) {
+      const { list } = payload;
+      return { ...state, ...{ attributeComponentKeyList: list } };
+    },
   },
 });
 
-// 每次改变页面数据内容时，记录的上一次操作历史
-function RevokeListChange(state) {
-  let newRevokeList = cloneDeep(state.revokeList);
-  newRevokeList.push(cloneDeep(state.initData)); // 当前添加元素之前的数据存入历史记录中
-  return {
-    revokeList: newRevokeList,
-    contraryRevokeList: [],
-  };
-}

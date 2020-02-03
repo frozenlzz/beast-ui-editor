@@ -1,8 +1,6 @@
 import { appConfig } from '@/appConfig';
 import React from 'react';
-import { isEmpty, cloneDeep, isArray, forEach } from 'lodash-es';
-import * as JH_DOM from 'jh-lib';
-import { attributesToDOM } from '@/helpers/loader';
+import { isEmpty, cloneDeep, isArray, forEach, isObject } from 'lodash-es';
 
 const config = appConfig.INTERFACE_DESIGN;
 
@@ -11,50 +9,7 @@ export const modelName = config.modelName;
 export const api = config.api;
 export const cn = config.cn;
 
-// export const breadcrumbList = [
-//   {
-//     title: '测评报告管理',
-//   },
-//   {
-//     title: '报告列表',
-//   },
-// ];
-
 export default config;
-
-// 输出对应的DomType功能模块
-export const BOM_TYPE = ({ DomType = '', name = 'demo1', style = {}, attribute = {} }) => {
-  let newStyles = cloneDeep(style);
-  let newAttribute = cloneDeep(attribute);
-  let bom = null;
-  if (!isEmpty(newAttribute)) {
-    for (let key in newAttribute) {
-      if (newAttribute.hasOwnProperty(key) && newAttribute[key]['$$_type'])
-        newAttribute[key]['$$_type'] === 'jsx' && (newAttribute[key] = attributesToDOM(newAttribute[key]['$$_type'], newAttribute[key]['$$_body']));
-    }
-  }
-  newStyles.width = '100%';
-  if (JH_DOM[DomType]) {
-    let Data = JH_DOM[DomType];
-    bom = <Data {...newAttribute} style={{ ...newStyles }}></Data>;
-  } else {
-    bom = (
-      <div>{name}</div>
-    );
-  }
-  return bom;
-};
-// 将数据转换成可渲染页面数据格式
-export const DataToDom = data => {
-  if (!isEmpty(data) && isArray(data)) {
-    let newData = cloneDeep(data);
-    return newData.map((item, index) => {
-      const { DomType = '', name = 'demo1', style = {}, attribute = {} } = item;
-      item.comp = BOM_TYPE({ DomType, name, style, attribute });
-      return item;
-    });
-  }
-};
 
 /**
  * 生成随机字符串(可指定长度)
@@ -80,17 +35,51 @@ export const randomString = len => {
  * */
 
 function getElementToKey() {
-  let newData;
+  // let newData;
+  // return function fn({ data = [], index = '' }) {
+  //   if (data.length !== 0) {
+  //     data.map((v, i) => {
+  //       if (v.key === index) {
+  //         newData = v;
+  //         return v;
+  //       } else if (v.children && v.children.length > 0) {
+  //         fn({ data: v.children, index: index });
+  //       } else {
+  //         return {};
+  //       }
+  //     });
+  //   }
+  //   return newData;
+  // };
+  let newData = {};
   return function fn({ data = [], index = '' }) {
     if (data.length !== 0) {
       data.map((v, i) => {
-        if (v.key === index) {
-          newData = v;
-          return v;
-        } else if (v.children && v.children.length > 0) {
-          fn({ data: v.children, index: index });
+        if (v.hasOwnProperty('$$_type')) {
+          if (v.$$_type === 'component' && v.$$_body.key === index) {
+            newData = v.$$_body;
+            return v;
+          }
         } else {
-          return {};
+          if (v.key === index) {
+            newData = v;
+            return v;
+          } else if (v.children && v.children.length > 0) {
+            fn({ data: v.children, index: index });
+          } else if (v.attribute && !isEmpty(v.attribute)) {
+            for (let attributeKey in v.attribute) {
+              if (v.attribute.hasOwnProperty(attributeKey)) {
+                if (v.attribute[attributeKey].hasOwnProperty('$$_type') && !isEmpty(v.attribute[attributeKey]['$$_body'])) {
+                  if (v.attribute[attributeKey]['$$_type'] === 'jsx') {
+                    fn({ data: v.attribute[attributeKey]['$$_body'], index: index });
+                  } else if (v.attribute[attributeKey]['$$_type'] === 'component' && v.attribute[attributeKey]['$$_body']['key'] === index) {
+                    newData = v.attribute[attributeKey]['$$_body'];
+                    return v.attribute[attributeKey]['$$_body'];
+                  }
+                }
+              }
+            }
+          }
         }
       });
     }
@@ -118,29 +107,96 @@ export function addChildrenData(initData, key, data) {
 
 // 删除对应对象
 export function deleteChildrenData(initData, key) {
+  // initData.forEach((v, i) => {
+  //   if (v.key === key) {
+  //     initData.splice(i, 1);
+  //     return;
+  //   } else if (v.children) {
+  //     deleteChildrenData(v.children, key);
+  //   }
+  // });
   initData.forEach((v, i) => {
-    if (v.key === key) {
-      initData.splice(i, 1);
-      return;
-    } else if (v.children) {
-      deleteChildrenData(v.children, key);
+    if (v.hasOwnProperty('$$_type')) {
+      if (v.$$_type === 'component' && v.$$_body.key === key) {
+        initData.splice(i, 1);
+        return;
+      }
+    } else {
+      if (v.key === key) {
+        initData.splice(i, 1);
+        return;
+      } else if (v.children) {
+        deleteChildrenData(v.children, key);
+      } else if (v.attribute) {
+        if (!isEmpty(v.attribute)) {
+          for (let ai in v.attribute) {
+            if (isObject(v.attribute[ai]) && v.attribute[ai].$$_type) {
+              if (v.attribute[ai].$$_type === 'jsx' && !isEmpty(v.attribute[ai].$$_body)) {
+                deleteChildrenData(v.attribute[ai].$$_body, key);
+              }
+            }
+          }
+        }
+      }
     }
   });
 }
 
 // 修改对应对象
 export function editChildrenData(initData, key, data) {
+  // initData.forEach((v, i) => {
+  //   if (v.key === key) {
+  //     for (let j in v) {
+  //       if (j !== 'key' && v.hasOwnProperty(j)) {
+  //         v[j] = typeof data[j] !== 'undefined' ? (data[j] !== '' ? data[j] : '') : v[j];
+  //       }
+  //     }
+  //     return;
+  //   } else if (v.children) {
+  //     editChildrenData(v.children, key, data);
+  //   }
+  // });
   initData.forEach((v, i) => {
-    if (v.key === key) {
-      for (let j in v) {
-        if (j !== 'key' && v.hasOwnProperty(j)) {
-          v[j] = typeof data[j] !== 'undefined' ? (data[j] !== '' ? data[j] : '') : v[j];
+    if (v.hasOwnProperty('$$_type')) {
+      if (v.$$_type === 'component' && v.$$_body.key === key) {
+        for (let j in v.$$_body) {
+          if (j !== 'key' && v.$$_body.hasOwnProperty(j)) {
+            v.$$_body[j] = typeof data[j] !== 'undefined' ? (data[j] !== '' ? data[j] : '') : v.$$_body[j];
+          }
+        }
+        return;
+      }
+    } else {
+      if (v.key === key) {
+        for (let j in v) {
+          if (j !== 'key' && v.hasOwnProperty(j)) {
+            v[j] = typeof data[j] !== 'undefined' ? (data[j] !== '' ? data[j] : '') : v[j];
+          }
+        }
+        return;
+      } else if (v.children) {
+        editChildrenData(v.children, key, data);
+      } else if (v.attribute) {
+        if (!isEmpty(v.attribute)) {
+          for (let ai in v.attribute) {
+            if (isObject(v.attribute[ai]) && v.attribute[ai].$$_type) {
+              if (v.attribute[ai].$$_type === 'jsx' && !isEmpty(v.attribute[ai].$$_body)) {
+                editChildrenData(v.attribute[ai].$$_body, key, data);
+              }
+            }
+          }
         }
       }
-      return;
-    } else if (v.children) {
-      editChildrenData(v.children, key, data);
     }
   });
 }
 
+// 每次改变页面数据内容时，记录的上一次操作历史
+export function RevokeListChange(state) {
+  let newRevokeList = cloneDeep(state.revokeList);
+  newRevokeList.push(cloneDeep(state.initData)); // 当前添加元素之前的数据存入历史记录中
+  return {
+    revokeList: newRevokeList,
+    contraryRevokeList: [],
+  };
+}

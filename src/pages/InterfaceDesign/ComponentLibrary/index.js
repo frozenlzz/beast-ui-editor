@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Collapse, Icon, Popover, Input } from 'antd';
-import { BOM_TYPE, getKeyToElement, modelName, randomString } from '../config';
+import { getKeyToElement, modelName, randomString } from '../config';
+import { BOM_TYPE } from '@/helpers/renderPage';
 import { isEmpty } from 'lodash-es';
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -170,25 +171,21 @@ class ComponentLibrary extends Component {
                   <Button type="primary" size="large" onClick={this.toSave.bind(this)}>
                     保存页面
                   </Button>
-                </div>
-                <div className={styles['line']}></div>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}>
                   <Button.Group>
-                    <Button type="primary"
-                            disabled={isEmpty(revokeList)}
-                            onClick={this.revokeList.bind(this)}>
-                      <Icon type="left"/>撤销
+                    <Button disabled={isEmpty(revokeList)}
+                            onClick={this.revokeList.bind(this)}
+                            title={'撤销'}
+                            style={{ marginRight: '10px' }}>
+                      <Icon type="undo"/>
                     </Button>
-                    <Button type="primary"
-                            disabled={isEmpty(contraryRevokeList)}
-                            onClick={this.contraryRevokeList.bind(this)}>
-                      反撤销<Icon type="right"/>
+                    <Button disabled={isEmpty(contraryRevokeList)}
+                            onClick={this.contraryRevokeList.bind(this)}
+                            title={'反撤销'}>
+                      <Icon type="redo"/>
                     </Button>
                   </Button.Group>
                 </div>
+                <div className={styles['line']}></div>
               </div>
             </Panel>
             <Panel header={`组件库 (拖拽到画布)`} key="2">

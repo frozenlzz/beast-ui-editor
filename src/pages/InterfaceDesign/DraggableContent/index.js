@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { modelName, DataToDom } from '../config';
+import { modelName } from '../config';
+import { DataToDom } from '@/helpers/renderPage';
 import { isEmpty, ceil } from 'lodash-es';
 import { Slider } from 'antd';
 import { DraggableContainer, DraggableChild } from '@/components/Draggable';
@@ -112,6 +113,7 @@ class DraggableContent extends Component {
                 <DraggableChild key={`_${j}`}
                                 defaultPosition={PositionI}
                                 onClick={e => this.props.elementClick(e, i)}
+                                onDoubleClick={e => this.props.elementDblClick(e, i)}
                                 onMouseUpCapture={e => this.props.MouseUp(e, i.key, i)}>
                   <div
                     style={{
@@ -254,6 +256,7 @@ class DraggableContent extends Component {
               <DraggableChild key={index}
                               defaultPosition={Position}
                               onClick={e => this.props.elementClick(e, item)}
+                              onDoubleClick={e => this.props.elementDblClick(e, item)}
                               onMouseUpCapture={e => this.props.MouseUp(e, item.key, item)}>
                 <div
                   style={
@@ -324,6 +327,7 @@ DraggableContent.defaultProps = {
   allowDrop: '', //拖拽到画布上触发的事件
   canvasClick: '', // 点击画布时触发的事件
   elementClick: '', // 点击元素时触发的事件
+  elementDblClick: '', // 双击元素时触发的事件
   MouseUp: '', // 点击元素按下鼠标弹起之后触发的事件
   showDetail: '', // 编辑弹窗显示
   currentIndex: -1, // 当前点击元素的对应key值

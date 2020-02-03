@@ -25,11 +25,12 @@ message.config({
   maxCount: 1,
 });
 
-document.body.onclick = (e) => {
-  if (e.target && /(INPUT|TEXTAREA)/.test(e.target.tagName) && e.target.select) {
-    e.target.select();
-  }
-};
+// LZZ 输入框聚焦时全选内容
+// document.body.onclick = (e) => {
+//   if (e.target && /(INPUT|TEXTAREA)/.test(e.target.tagName) && e.target.select) {
+//     e.target.select();
+//   }
+// };
 
 let refleshConfirm = null;
 document.body.onkeydown = function(e) {

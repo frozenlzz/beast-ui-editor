@@ -2,7 +2,8 @@ import { Modal, Button } from 'antd';
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { createDetail } from '@/components/HocCRUD';
-import { modelName, DataToDom, randomString, getKeyToElement } from '../config';
+import { modelName, randomString, getKeyToElement } from '../config';
+import { DataToDom } from '@/helpers/renderPage';
 import PageItem from '@/components/PageItem';
 import { isEmpty, omit, cloneDeep } from 'lodash-es';
 import ComponentLibrary from '../ComponentLibrary';
@@ -227,7 +228,11 @@ class HostDetail extends React.Component {
       },
     );
   }
-
+  elementDblClick(e, item) {
+    e.persist();
+    e.stopPropagation();
+    console.log('双击')
+  }
   /**
    *
    * 新建保存
@@ -308,7 +313,7 @@ class HostDetail extends React.Component {
     const bodyWidth = document.body.offsetWidth;
     const containerStyle = {
       ...style,
-      left: '0',
+      left: '0px',
       top: '0px',
       // width: (!isEmpty(config) && config.style.width !== '100%' ? config.style.width : '1920px') || 1,
       width: (!isEmpty(config) && this.widthFn(config.style.width, bodyWidth)) || 1,
@@ -344,6 +349,7 @@ class HostDetail extends React.Component {
                   allowDrop={this.allowDrop.bind(this)}
                   canvasClick={this.canvasClick.bind(this)}
                   elementClick={this.elementClick.bind(this)}
+                  elementDblClick={this.elementDblClick.bind(this)}
                   MouseUp={this.MouseUp.bind(this)}
                   showDetail={this.showDetail.bind(this)}
                   currentIndex={currentIndex}

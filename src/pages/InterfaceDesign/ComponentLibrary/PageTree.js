@@ -230,7 +230,7 @@ class PageTree extends Component {
           style={{
             position: 'absolute',
             top: '-16px',
-            left: '0',
+            left: '0px',
             width: '100%',
             height: '40px',
             lineHeight: '40px',

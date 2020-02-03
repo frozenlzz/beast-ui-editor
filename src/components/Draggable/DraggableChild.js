@@ -93,6 +93,7 @@ export default class DraggableChild extends React.Component {
       >
         {React.cloneElement(this.props.children, {
           onClick:e => this.props.onClick(e),
+          onDoubleClick: e => this.props.onDoubleClick(e),
           style,
           className,
           'data-x': x,
