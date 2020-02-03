@@ -1,18 +1,4 @@
 {
   "plugins": [
-    [
-      "import",
-      [
-        {
-          "libraryName": "antd",
-          "style": true
-        },
-        {
-          "libraryName": "lodash",
-          "libraryDirectory": "",
-          "camel2DashComponentName": false
-        }
-      ]
-    ]
   ]
 }

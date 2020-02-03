@@ -49,7 +49,7 @@ export default {
     basePath: '/',
   },
   routes: routerArr,
-  ignoreMomentLocale: true,
+  // ignoreMomentLocale: true,
   disableRedirectHoist: true,
   history: 'hash',
   hash: true,
