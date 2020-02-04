@@ -58,7 +58,7 @@ class DraggableContent extends Component {
                   ...i.style,
                   border:
                     (currentIndex === i.key && currentIndex !== -1
-                      ? '1px solid #f5222d'
+                      ? '1px dashed #f5222d'
                       : i.style.border ? i.style.border : '1px solid #ddd'),
                 }}>
                   {this.draggableContainers({
@@ -76,7 +76,7 @@ class DraggableContent extends Component {
                       width: '100%',
                       border:
                         (currentIndex === i.key && currentIndex !== -1
-                          ? '1px solid #f5222d'
+                          ? '1px dashed #f5222d'
                           : i.style.border ? i.style.border : ''),
                     },
                   },
@@ -126,7 +126,7 @@ class DraggableContent extends Component {
                       border:
                         (i.DomType === 'div' || i.style.display) &&
                         (currentIndex === i.key && currentIndex !== -1
-                          ? '1px solid #f5222d'
+                          ? '1px dashed #f5222d'
                           : '1px solid #ddd'),
                     }}
                   >
@@ -194,7 +194,7 @@ class DraggableContent extends Component {
                       minHeight: '300px',
                       position: 'relative',
                       boxSizing: 'border-box',
-                      ...currentIndex === i.key && currentIndex !== -1 && { border: '1px solid #f5222d' }
+                      ...currentIndex === i.key && currentIndex !== -1 && { border: '1px dashed #f5222d' }
                       || {
                         borderWidth: '0px 1px 1px',
                         borderColor: '#e8e8e8',
@@ -269,7 +269,7 @@ class DraggableContent extends Component {
                         border:
                           (item.DomType === 'div' || displayFix) &&
                           (currentIndex === item.key && currentIndex !== -1
-                            ? '1px solid #f5222d'
+                            ? '1px dashed #f5222d'
                             : displayFix ? '' : '1px solid #ddd'),
                         position: displayFix ? '' : 'absolute',
                         zIndex: currentIndex === item.key ? zIndex : item.style && item.style.zIndex || 0,

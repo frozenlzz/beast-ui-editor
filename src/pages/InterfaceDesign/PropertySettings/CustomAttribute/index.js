@@ -115,10 +115,10 @@ export class CustomAttributeComponent extends Component {
       payload: { list: e },
     });
   }
+  // 回退上层组件key值
   arrowLeft() {
     let attributeComponentKeyList = cloneDeep(this.props.attributeComponentKeyList);
     let oldKey = attributeComponentKeyList.pop();
-    console.log('oldKey',oldKey);
     this.attributeComponentKeyListChange(attributeComponentKeyList);
     this.currentKeyChange(oldKey);
   }
